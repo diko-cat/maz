@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hospital — три варианта интерфейса
 
-## Getting Started
+Frontend-приложение системы управления пациентами **без бэкенда** на Next.js App Router, React и TypeScript. Команда: **Бекаман, Данияр, Далел**.
 
-First, run the development server:
+[Репозиторий GitHub](https://github.com/diko-cat/maz) · [Техническое задание](TZ.md) · [Корневой README](../README.md)
+
+## Локальный запуск
+
+Команды выполняются из папки `hospital`:
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открыть [http://localhost:3000](http://localhost:3000). Если сервер выберет другой порт, использовать адрес, напечатанный в терминале. Рекомендуется Node.js 24 LTS и npm. Точные версии зависимостей зафиксированы в `package.json` и `package-lock.json`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Интерфейсы
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Маршрут | Реализация |
+| --- | --- |
+| `/` | Вариант по умолчанию на Tailwind CSS |
+| `/tailwind` | Tailwind CSS |
+| `/bootstrap` | Bootstrap |
+| `/mui` | MUI |
 
-## Learn More
+Переключатель библиотек расположен в интерфейсе. Каждый вариант содержит разделы обзора, пациентов, врачей и записей на приём.
 
-To learn more about Next.js, take a look at the following resources:
+## Возможности текущего этапа
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Обзор с показателями, рассчитанными на основе текущих данных.
+- Пациенты: поиск по ФИО, фильтр по полу, сортировка по ФИО или дате регистрации.
+- Добавление и редактирование пациентов с проверкой полей; удаление с подтверждением.
+- Врачи: демонстрационный список и поиск по имени или специальности.
+- Записи на приём: просмотр, создание с проверкой занятости врача и отмена.
+- Общие данные пациентов и записей для трёх вариантов интерфейса.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Данные хранятся в `localStorage`: они сохраняются после перезагрузки в том же браузере и на том же адресе. Для другого устройства, браузера или порта используется отдельное хранилище. Очистка данных сайта в браузере удаляет локальные изменения и возвращает начальную демонстрацию при следующем открытии.
 
-## Deploy on Vercel
+Это учебная демонстрация на вымышленных данных. Серверное API, база данных и авторизация не нужны для этого задания. Запуск через dev-сервер Next.js служит для разработки интерфейса. В конце [ТЗ](TZ.md) сохранён архивный план более широкой системы; его серверные функции не являются обязательным продолжением этой работы.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Проверки и production-сборка
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm test
+npm run lint
+npm run build
+npm run start
+```
+
+`npm test` проверяет обработку дат, валидацию пациентов и конфликты расписания. Последняя команда запускает уже собранное приложение. Проверки выполняются после установки зависимостей.
+
+## Проверка при сдаче
+
+1. Открыть все три маршрута и основные разделы.
+2. Найти пациента, применить фильтр по полу и изменить сортировку.
+3. Добавить пациента, изменить его данные, проверить отмену и подтверждение удаления.
+4. Отправить форму с ошибками и проверить сообщения.
+5. Создать запись, проверить занятое время врача и отмену записи.
+6. Обновить страницу и переключить библиотеку: данные должны сохраниться.
+7. Проверить узкий экран и пустые результаты поиска.
