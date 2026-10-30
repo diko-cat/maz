@@ -1,4 +1,4 @@
-@layer theme, base, bootstrap, mui, components, utilities;
+@layer theme, base, components, utilities;
 @import "tailwindcss";
 
 @theme inline {
@@ -26,8 +26,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 ::selection { background: #dceee7; color: #225e50; }
 
 .app-shell { --accent: #227568; --accent-soft: #edf6f2; --accent-border: #d6e9e2; min-height: 100vh; }
-.variant-bootstrap { --accent: #5652c8; --accent-soft: #f0effb; --accent-border: #dedcf3; background: #f7f8fc; }
-.variant-mui { --accent: #4f46e5; --accent-soft: #eeedfd; --accent-border: #dddbfa; background: #f8f9fd; }
 .app-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 25; width: 238px; padding: 29px 17px 18px; display: flex; flex-direction: column; overflow-y: auto; background: #fff; border-right: 1px solid #e8eeeb; }
 .brand { display: flex; align-items: center; gap: 10px; padding: 0 12px; color: #203f35; text-decoration: none; font-size: 23px; font-weight: 750; letter-spacing: -1.1px; }
 .brand:hover { color: #203f35; }
@@ -41,7 +39,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .main-nav .nav-item:hover { background: #f5f8f6; color: #3d6152; }
 .main-nav .nav-item.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .nav-count { display: inline-grid; place-items: center; margin-left: auto; min-width: 23px; height: 19px; padding: 0 5px; border-radius: 5px; background: #e1eee8; color: #43846c; font-size: 9px; font-weight: 600; }
-.variant-bootstrap .nav-count, .variant-mui .nav-count { background: var(--accent-border); color: var(--accent); }
 .sidebar-note { margin: auto 7px 0; padding: 17px 14px 15px; border: 1px solid #e0ece5; border-radius: 9px; background: #f7faf8; color: #627c6c; font-size: 11px; line-height: 1.7; }
 .sidebar-note h2, .sidebar-note h3, .sidebar-note strong { display: block; margin: 0 0 5px; color: #3e6150; font-size: 11px; font-weight: 600; }
 .sidebar-note p { margin: 5px 0 11px; }
@@ -74,15 +71,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 .page-description { margin: 8px 0 0; color: #8a9990; font-size: 11px; line-height: 1.7; }
 .date-chip { display: flex; align-items: center; gap: 7px; margin-top: 19px; padding: 8px 11px; border: 1px solid #e2eae5; border-radius: 6px; background: #fff; color: #7b8d80; white-space: nowrap; font-size: 10px; }
 .date-chip svg { width: 13px; height: 13px; }
-.variant-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; padding: 12px 14px; border: 1px solid #e4ebe7; border-radius: 8px; background: #ffffffd9; }
-.variant-caption { display: flex; align-items: center; gap: 7px; color: #8d9a92; font-size: 10px; }
-.variant-caption strong { color: #5a6e60; font-weight: 500; }
-.variant-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-.variant-tabs { display: flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid #edf0ee; border-radius: 6px; background: #f7f9f8; }
-.variant-tabs a { display: flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 4px; color: #8a9790; font-size: 10px; font-weight: 500; text-decoration: none; transition: color .16s ease, background .16s ease; }
-.variant-tabs a:hover { color: var(--accent); }
-.variant-tabs a.is-active { background: #fff; color: var(--accent); box-shadow: 0 1px 4px #2b493510; }
-.variant-tabs svg { width: 12px; height: 12px; }
 .app-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding: 22px 0 8px; color: #a2ada6; font-size: 9px; }
 .app-footer a { color: #84998a; text-decoration: none; }
 .app-footer a:hover { color: var(--accent); text-decoration: underline; }
@@ -138,7 +126,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   .app-workspace { margin-left: 210px; }
   .app-main { padding: 28px 25px 18px; }
   .app-topbar { padding: 0 25px; }
-  .variant-caption { max-width: 230px; }
 }
 
 @media (max-width: 760px) {
@@ -158,9 +145,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   .eyebrow { font-size: 8px; }
   .date-chip { margin-top: 18px; padding: 7px 8px; font-size: 9px; }
   .date-chip svg { width: 13px; height: 13px; }
-  .variant-bar { padding: 10px 11px; gap: 9px; margin-bottom: 20px; }
-  .variant-caption { max-width: none; font-size: 9px; }
-  .variant-tabs a { font-size: 9px; padding: 6px 10px; }
   .app-footer { padding-top: 19px; font-size: 8px; }
   .app-dialog { padding: 23px; max-height: calc(100dvh - 32px); border-radius: 12px; }
   .toast-message { right: 16px; bottom: 16px; padding: 12px 15px; font-size: 11px; }
@@ -173,9 +157,6 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   .page-heading { flex-direction: column; gap: 11px; }
   .page-description { max-width: none; }
   .date-chip { margin-top: 0; padding: 5px 8px; }
-  .variant-bar { align-items: stretch; flex-direction: column; gap: 9px; }
-  .variant-tabs { justify-content: space-between; }
-  .variant-tabs a { flex: 1; justify-content: center; }
   .form-grid { grid-template-columns: 1fr; gap: 16px; }
   .dialog-header h2 { font-size: 19px; }
   .dialog-actions { gap: 8px; }

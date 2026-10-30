@@ -1,4 +1,3 @@
-export type Variant = "tailwind" | "bootstrap" | "mui";
 export type Section = "overview" | "patients" | "doctors" | "appointments";
 export type Patient = {
   id: string;

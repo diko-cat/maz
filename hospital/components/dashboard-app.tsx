@@ -6,11 +6,9 @@ import { Activity, ArrowUpRight, CalendarDays, CircleHelp, HeartPulse, LayoutDas
 import { doctors, type PatientDraft } from "@/lib/data";
 import { formatDate, statusLabels } from "@/lib/format";
 import { updateHospital, useHospitalStore } from "@/lib/store";
-import type { Appointment, DashboardModel, Patient, Section, Variant } from "@/lib/types";
+import type { Appointment, DashboardModel, Patient, Section } from "@/lib/types";
 import { AppointmentEditor, Modal, PatientEditor } from "./dialogs";
 import TailwindDashboard from "./tailwind-dashboard";
-import BootstrapDashboard from "./bootstrap-dashboard";
-import MuiDashboard from "./mui-dashboard";
 
 const sections = [
   { id: "overview", label: "Обзор", icon: LayoutDashboard, description: "Всё о работе клиники в одном месте" },
@@ -18,9 +16,8 @@ const sections = [
   { id: "doctors", label: "Врачи", icon: Stethoscope, description: "Специалисты и кабинеты вашей клиники" },
   { id: "appointments", label: "Записи на приём", icon: CalendarDays, description: "Расписание и управление записями" },
 ] as const;
-const variants = [{ id: "tailwind", name: "Tailwind", number: "01" }, { id: "bootstrap", name: "Bootstrap", number: "02" }, { id: "mui", name: "MUI", number: "03" }] as const;
 
-export default function DashboardApp({ variant }: { variant: Variant }) {
+export default function DashboardApp() {
   const store = useHospitalStore();
   const [section, setCurrentSection] = useState<Section>("overview");
   const [query, setQuery] = useState("");
@@ -61,7 +58,7 @@ export default function DashboardApp({ variant }: { variant: Variant }) {
     onAddPatient: () => setEditor("new"), onEditPatient: setEditor, onDeletePatient: setDeleting, onAddAppointment: () => setAppointmentEditor(true),
     onCancelAppointment: (appointment) => { updateHospital({ patients: store.patients, appointments: store.appointments.map((a) => a.id === appointment.id ? { ...a, status: "cancelled" } : a) }); setToast("Запись отменена"); },
   };
-  return <div className={`app-shell variant-${variant}`}>
+  return <div className="app-shell">
     <a href="#main-content" className="skip-link">Перейти к содержимому</a>
     {sidebarOpen && <button className="sidebar-backdrop" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)} />}
     <aside id="app-sidebar" className={`app-sidebar ${sidebarOpen ? "is-open" : ""}`}>
@@ -73,16 +70,15 @@ export default function DashboardApp({ variant }: { variant: Variant }) {
     </aside>
     <div className="app-workspace"><header className="app-topbar"><div className="topbar-context"><button className="icon-button mobile-menu" onClick={() => setSidebarOpen(!sidebarOpen)} aria-label={sidebarOpen ? "Закрыть меню" : "Открыть меню"} aria-expanded={sidebarOpen} aria-controls="app-sidebar">{sidebarOpen ? <PanelLeftClose size={21} /> : <PanelLeftOpen size={21} />}</button><span>Рабочее пространство</span><span className="breadcrumb-slash">/</span><strong>{active.label}</strong></div><div className="topbar-right"><span className="local-mode"><i />Локальный режим</span><span className="topbar-avatar">ДК</span></div></header>
       <main id="main-content" className="app-main"><div className="page-heading"><div><p className="eyebrow">ВАША КЛИНИКА, КАЖДЫЙ ДЕНЬ</p><h1>{active.label === "Обзор" ? "Обзор клиники" : active.label}</h1><p className="page-description">{active.description}</p></div><div className="date-chip"><CalendarDays size={16} /><span>{store.ready ? formatDate(store.today) : "Загрузка даты…"}</span></div></div>
-        <div className="variant-bar"><div className="variant-caption"><span className="variant-dot" />Три подхода. Одна клиника.</div><nav className="variant-tabs" aria-label="Варианты интерфейса">{variants.map((v) => <Link key={v.id} href={`/${v.id}`} className={variant === v.id ? "is-active" : ""} aria-current={variant === v.id ? "page" : undefined}><span>{v.number}</span>{v.name}</Link>)}</nav></div>
         {store.storageWarning && <p className="notice" role="status">{store.storageWarning}</p>}
-        {!store.ready ? <div className="loading-state" role="status"><HeartPulse size={30} />Загружаем данные клиники…</div> : variant === "bootstrap" ? <BootstrapDashboard model={model} /> : variant === "mui" ? <MuiDashboard model={model} /> : <TailwindDashboard model={model} />}
-        <footer className="app-footer"><span>© 2026 Medica · Забота в каждом действии</span><span>Демонстрационные данные · {variants.find((v) => v.id === variant)?.name}</span></footer>
+        {!store.ready ? <div className="loading-state" role="status"><HeartPulse size={30} />Загружаем данные клиники…</div> : <TailwindDashboard model={model} />}
+        <footer className="app-footer"><span>© 2026 Medica · Забота в каждом действии</span><span>Демонстрационные данные</span></footer>
       </main>
     </div>
     {editor && <PatientEditor patient={editor} today={store.today} onSave={savePatient} onClose={() => setEditor(null)} />}
     {appointmentEditor && <AppointmentEditor patients={store.patients} appointments={store.appointments} today={store.today} onSave={saveAppointment} onClose={() => setAppointmentEditor(false)} />}
     {deleting && <Modal title="Удалить пациента?" onClose={() => setDeleting(null)}><p className="dialog-description">Пациент <strong>{deleting.name}</strong> будет удалён вместе со связанными записями на приём. Отменить это действие нельзя.</p><div className="dialog-actions"><button className="secondary-button" onClick={() => setDeleting(null)}>Оставить пациента</button><button className="danger-button" onClick={() => { updateHospital({ patients: store.patients.filter((p) => p.id !== deleting.id), appointments: store.appointments.filter((a) => a.patientId !== deleting.id) }); setDeleting(null); setToast("Пациент и связанные записи удалены"); }}>Удалить пациента</button></div></Modal>}
-    {help && <Modal title="О проекте Medica" onClose={() => setHelp(false)}><p className="dialog-description">Учебная система управления клиникой на Next.js. Три варианта интерфейса используют общие данные: Tailwind CSS, Bootstrap и MUI.</p><div className="about-details"><p><strong>Что работает</strong><br />Поиск, фильтры, добавление и редактирование пациентов, удаление с подтверждением, запись на приём и проверка занятого времени.</p><p><strong>Где хранятся данные</strong><br />В localStorage этого браузера. Используется вымышленный набор данных. Сервер, база данных и авторизация относятся к будущим этапам.</p><a href="https://github.com/diko-cat/maz" target="_blank" rel="noreferrer">Репозиторий на GitHub ↗</a></div><div className="dialog-actions"><button className="primary-button" onClick={() => setHelp(false)}>Понятно</button></div></Modal>}
+    {help && <Modal title="О проекте Medica" onClose={() => setHelp(false)}><p className="dialog-description">Учебная система управления клиникой на Next.js с интерфейсом на Tailwind CSS.</p><div className="about-details"><p><strong>Что работает</strong><br />Поиск, фильтры, добавление и редактирование пациентов, удаление с подтверждением, запись на приём и проверка занятого времени.</p><p><strong>Где хранятся данные</strong><br />В localStorage этого браузера. Используется вымышленный набор данных. Приложение работает без бэкенда, базы данных и авторизации.</p><a href="https://github.com/diko-cat/maz" target="_blank" rel="noreferrer">Репозиторий на GitHub ↗</a></div><div className="dialog-actions"><button className="primary-button" onClick={() => setHelp(false)}>Понятно</button></div></Modal>}
     {toast && <div className="toast-message" role="status"><span className="toast-check">✓</span>{toast}<button className="icon-button" onClick={() => setToast("")} aria-label="Закрыть уведомление"><X size={16} /></button></div>}
   </div>;
 }
