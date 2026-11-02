@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test lib/data.test.mjs",
+    "test": "node --experimental-strip-types --test lib/*.test.mjs",
     "typecheck": "next typegen && tsc --noEmit",
     "check": "npm run lint && npm test && npm run typecheck && npm run build"
   },

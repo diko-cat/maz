@@ -1,44 +1,80 @@
 export type Section = "overview" | "patients" | "doctors" | "appointments";
-export type Patient = {
+export type PatientGender = "female" | "male";
+export type AppointmentStatus = "confirmed" | "pending" | "completed" | "cancelled";
+
+export interface Patient {
   id: string;
   name: string;
   birthDate: string;
-  gender: "female" | "male";
+  gender: PatientGender;
   phone: string;
   email: string;
   registeredAt: string;
-};
-export type Doctor = { id: string; name: string; specialty: string; room: string; available: boolean };
-export type Appointment = {
+}
+
+export interface Doctor {
+  id: string;
+  name: string;
+  specialty: string;
+  room: string;
+  available: boolean;
+}
+
+export interface Appointment {
   id: string;
   patientId: string;
   doctorId: string;
   date: string;
   time: string;
-  status: "confirmed" | "pending" | "completed" | "cancelled";
-};
-export type Stat = { label: string; value: number; detail: string; kind: "patients" | "doctors" | "appointments" | "today" };
-export interface DashboardModel {
-  section: Section;
-  setSection: (section: Section) => void;
-  query: string;
-  setQuery: (value: string) => void;
-  gender: string;
-  setGender: (value: string) => void;
-  sort: string;
-  setSort: (value: string) => void;
+  status: AppointmentStatus;
+}
+
+export interface HospitalData {
   patients: Patient[];
-  doctors: Doctor[];
   appointments: Appointment[];
+}
+
+export interface HospitalSnapshot extends HospitalData {
+  today: string;
+  ready: boolean;
+  storageWarning: string;
+}
+
+export interface Stat {
+  kind: "patients" | "doctors" | "appointments" | "today";
+  label: string;
+  value: number;
+  detail: string;
+}
+
+export interface DashboardFilters {
+  query: string;
+  gender: string;
+  sort: string;
+}
+
+export interface DashboardSelection {
   filteredPatients: Patient[];
   filteredDoctors: Doctor[];
   filteredAppointments: Appointment[];
   stats: Stat[];
-  today: string;
-  ready: boolean;
+}
+
+export interface DashboardActions {
+  setSection: (section: Section) => void;
+  setQuery: (value: string) => void;
+  setGender: (value: string) => void;
+  setSort: (value: string) => void;
   onAddPatient: () => void;
   onEditPatient: (patient: Patient) => void;
   onDeletePatient: (patient: Patient) => void;
   onAddAppointment: () => void;
   onCancelAppointment: (appointment: Appointment) => void;
+}
+
+export interface DashboardModel extends HospitalData, DashboardFilters, DashboardSelection, DashboardActions {
+  section: Section;
+  doctors: Doctor[];
+  today: string;
+  ready: boolean;
 }

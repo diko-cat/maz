@@ -1,0 +1,257 @@
+.app-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: calc(100% - 32px);
+  max-width: 540px;
+  max-height: calc(100dvh - 48px);
+  padding: 27px 29px;
+  border: 1px solid #e0e9e4;
+  border-radius: 15px;
+  background: #fff;
+  color: #314c3e;
+  box-shadow: 0 20px 90px #122e3230;
+  overflow: auto;
+}
+
+.app-dialog::backdrop {
+  background: #142a3055;
+  backdrop-filter: blur(3px);
+}
+
+.dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.dialog-header h2 {
+  margin: 0;
+  color: #2b4639;
+  font-size: 21px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -.5px;
+}
+
+.dialog-header .eyebrow {
+  margin-bottom: 7px;
+  font-size: 8px;
+}
+
+.dialog-header .icon-button {
+  margin: -5px -8px 0 0;
+}
+
+.dialog-description {
+  margin: 10px 0 20px;
+  color: #8a998f;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 15px;
+  margin: 24px 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #5d7364;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.form-field input, .form-field select, .form-field textarea {
+  width: 100%;
+  min-width: 0;
+  height: 41px;
+  padding: 10px 11px;
+  border: 1px solid #dfe7e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #3c5948;
+  font-size: 12px;
+  font-weight: 400;
+  outline: none;
+  transition: border-color .16s ease, box-shadow .16s ease;
+}
+
+.form-field textarea {
+  height: 92px;
+  resize: vertical;
+}
+
+.form-field input::placeholder, .form-field textarea::placeholder {
+  color: #b2bdb5;
+}
+
+.form-field select {
+  padding-right: 25px;
+}
+
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+  border-color: #71a68f;
+  box-shadow: 0 0 0 3px #23736412;
+}
+
+.form-field input[aria-invalid="true"] {
+  border-color: #cf7974;
+  box-shadow: 0 0 0 3px #cf797410;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.field-error {
+  display: block;
+  margin: 2px 0 0;
+  color: #bc5c56;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 24px;
+  padding-top: 19px;
+  border-top: 1px solid #edf1ee;
+}
+
+.primary-button, .secondary-button, .danger-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 37px;
+  padding: 9px 15px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: background .16s ease, box-shadow .16s ease;
+}
+
+.primary-button {
+  border-color: var(--accent, #227568);
+  background: var(--accent, #227568);
+  color: #fff;
+}
+
+.primary-button:hover {
+  filter: brightness(.93);
+}
+
+.secondary-button {
+  border-color: #dfe7e1;
+  background: #fff;
+  color: #7d8e82;
+}
+
+.secondary-button:hover {
+  background: #f6f9f7;
+  color: #4f6e5b;
+}
+
+.danger-button {
+  border-color: #bf645d;
+  background: #bf645d;
+  color: #fff;
+}
+
+.danger-button:hover {
+  background: #ab534d;
+}
+
+.notice {
+  margin: 18px 0;
+  padding: 13px 15px;
+  border: 1px solid #efe4d1;
+  border-radius: 7px;
+  background: #fcf9f2;
+  color: #a08b64;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.about-details {
+  color: #758a7b;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.about-details p {
+  margin: 0 0 13px;
+}
+
+.about-details ul {
+  margin: 12px 0 20px;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.about-details a {
+  color: #397f62;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.toast-message {
+  position: fixed;
+  right: 27px;
+  bottom: 25px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100% - 32px);
+  padding: 14px 19px;
+  border: 1px solid #dce9e1;
+  border-radius: 9px;
+  background: #fff;
+  color: #537862;
+  box-shadow: 0 7px 35px #244d3120;
+  font-size: 12px;
+  animation: toast-in .2s ease;
+}
+
+.toast-check {
+  display: inline-grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  border-radius: 50%;
+  background: #edf6ef;
+  color: #549369;
+}
+
+.toast-check svg {
+  width: 14px;
+  height: 14px;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(9px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

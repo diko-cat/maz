@@ -1,5 +1,5 @@
-import DashboardApp from "@/components/dashboard-app";
+import ClinicApp from "@/components/clinic-app";
 
 export default function TailwindPage() {
-  return <DashboardApp />;
+  return <ClinicApp />;
 }

@@ -1,0 +1,151 @@
+@media (min-width: 1600px) {
+  .app-main {
+    padding-top: 40px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .app-sidebar {
+    width: 210px;
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+  .app-workspace {
+    margin-left: 210px;
+  }
+  .app-main {
+    padding: 28px 25px 18px;
+  }
+  .app-topbar {
+    padding: 0 25px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-sidebar {
+    width: 238px;
+    transform: translateX(-100%);
+    transition: transform .2s ease;
+    box-shadow: 6px 0 35px #173c2410;
+  }
+  .app-sidebar.is-open {
+    transform: translateX(0);
+  }
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 24;
+    border: 0;
+    padding: 0;
+    background: #1b302c60;
+    backdrop-filter: blur(2px);
+  }
+  .app-workspace {
+    margin-left: 0;
+  }
+  .app-topbar {
+    height: 61px;
+    padding: 0 18px;
+  }
+  .mobile-menu {
+    display: inline-grid;
+    margin-left: -6px;
+  }
+  .topbar-context {
+    gap: 8px;
+    font-size: 10px;
+  }
+  .topbar-right {
+    gap: 12px;
+  }
+  .local-mode {
+    font-size: 9px;
+  }
+  .app-main {
+    padding: 25px 18px 14px;
+  }
+  .page-heading {
+    margin-bottom: 20px;
+  }
+  .page-heading h1 {
+    font-size: 23px;
+  }
+  .page-description {
+    max-width: 275px;
+    font-size: 10px;
+  }
+  .eyebrow {
+    font-size: 8px;
+  }
+  .date-chip {
+    margin-top: 18px;
+    padding: 7px 8px;
+    font-size: 9px;
+  }
+  .date-chip svg {
+    width: 13px;
+    height: 13px;
+  }
+  .app-footer {
+    padding-top: 19px;
+    font-size: 8px;
+  }
+  .app-dialog {
+    padding: 23px;
+    max-height: calc(100dvh - 32px);
+    border-radius: 12px;
+  }
+  .toast-message {
+    right: 16px;
+    bottom: 16px;
+    padding: 12px 15px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 450px) {
+  .local-mode {
+    display: none;
+  }
+  .app-topbar {
+    padding: 0 15px;
+  }
+  .app-main {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+  .page-heading {
+    flex-direction: column;
+    gap: 11px;
+  }
+  .page-description {
+    max-width: none;
+  }
+  .date-chip {
+    margin-top: 0;
+    padding: 5px 8px;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .dialog-header h2 {
+    font-size: 19px;
+  }
+  .dialog-actions {
+    gap: 8px;
+  }
+  .dialog-actions button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
