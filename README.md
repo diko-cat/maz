@@ -17,7 +17,7 @@ cd hospital
 npm ci
 npm run dev
 ```
-
+ я гондон я Данчик
 Открыть [http://localhost:3000](http://localhost:3000). Требуется Node.js, совместимый с установленной версией Next.js; рекомендуемый вариант — Node.js 24 LTS и npm.
 
 ## Интерфейс

@@ -36,20 +36,61 @@ export function isDate(value: string) {
 }
 
 export type PatientDraft = Pick<Patient, "name" | "birthDate" | "gender" | "phone" | "email">;
-export function validatePatient(draft: PatientDraft, today: string): Partial<Record<keyof PatientDraft, string>> {
+export function validatePatient(
+  draft: PatientDraft,
+  today: string,
+): Partial<Record<keyof PatientDraft, string>> {
   const errors: Partial<Record<keyof PatientDraft, string>> = {};
-  if (draft.name.trim().split(/\s+/).length < 2) errors.name = "Укажите фамилию и имя.";
-  if (!isDate(draft.birthDate) || draft.birthDate > today || draft.birthDate < "1900-01-01") errors.birthDate = "Укажите дату рождения от 1900 года до сегодняшнего дня.";
-  if (!/^\+?[\d\s()-]+$/.test(draft.phone.trim()) || draft.phone.replace(/\D/g, "").length < 10 || draft.phone.replace(/\D/g, "").length > 15) errors.phone = "Введите телефон: от 10 до 15 цифр.";
-  if (draft.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.email.trim())) errors.email = "Проверьте адрес электронной почты.";
+  const nameParts = draft.name.trim().split(/\s+/);
+  const phone = draft.phone.trim();
+  const phoneDigits = phone.replace(/\D/g, "");
+  const validBirthDate = isDate(draft.birthDate)
+    && draft.birthDate >= "1900-01-01"
+    && draft.birthDate <= today;
+  const validPhone = /^\+?[\d\s()-]+$/.test(phone)
+    && phoneDigits.length >= 10
+    && phoneDigits.length <= 15;
+
+  if (nameParts.length < 2) {
+    errors.name = "Укажите фамилию и имя.";
+  }
+  if (!validBirthDate) {
+    errors.birthDate = "Укажите дату рождения от 1900 года до сегодняшнего дня.";
+  }
+  if (!validPhone) {
+    errors.phone = "Введите телефон: от 10 до 15 цифр.";
+  }
+  if (draft.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(draft.email.trim())) {
+    errors.email = "Проверьте адрес электронной почты.";
+  }
   return errors;
 }
 
-export function appointmentError(appointments: Appointment[], patientId: string, doctorId: string, date: string, time: string, today: string) {
-  if (!isDate(date) || date < today) return "Выберите сегодняшнюю или будущую дату.";
-  if (!/^(0[89]|1[0-7]):(00|30)$/.test(time)) return "Выберите время с 08:00 до 17:30 с шагом 30 минут.";
-  const active = appointments.filter((item) => item.status !== "cancelled");
-  if (active.some((item) => item.doctorId === doctorId && item.date === date && item.time === time)) return "Врач уже занят в это время. Выберите другое время.";
-  if (active.some((item) => item.patientId === patientId && item.date === date && item.time === time)) return "У пациента уже есть запись на это время.";
+export function appointmentError(
+  appointments: Appointment[],
+  patientId: string,
+  doctorId: string,
+  date: string,
+  time: string,
+  today: string,
+) {
+  if (!isDate(date) || date < today) {
+    return "Выберите сегодняшнюю или будущую дату.";
+  }
+  if (!/^(0[89]|1[0-7]):(00|30)$/.test(time)) {
+    return "Выберите время с 08:00 до 17:30 с шагом 30 минут.";
+  }
+
+  const occupiedSlot = appointments.filter((appointment) => (
+    appointment.status !== "cancelled"
+    && appointment.date === date
+    && appointment.time === time
+  ));
+  if (occupiedSlot.some((appointment) => appointment.doctorId === doctorId)) {
+    return "Врач уже занят в это время. Выберите другое время.";
+  }
+  if (occupiedSlot.some((appointment) => appointment.patientId === patientId)) {
+    return "У пациента уже есть запись на это время.";
+  }
   return "";
 }
