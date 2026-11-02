@@ -1,11 +1,16 @@
-@layer theme, base, components, utilities;
 @import "tailwindcss";
-@import "./styles/base.css";
-@import "./styles/shell.css";
 @import "./styles/forms.css";
-@import "./styles/responsive.css";
 
 @theme inline {
   --font-sans: "Segoe UI", Arial, sans-serif;
   --font-mono: Consolas, monospace;
+}
+
+@layer base {
+  :root { color-scheme: light; }
+  body { @apply m-0 min-w-80 bg-slate-50 font-sans text-slate-800 antialiased; }
+  button { @apply cursor-pointer; }
+  button:disabled { @apply cursor-not-allowed opacity-50; }
+  :focus-visible { @apply outline-2 outline-offset-4 outline-teal-700; }
+  ::selection { @apply bg-teal-100 text-teal-950; }
 }

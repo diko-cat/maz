@@ -163,7 +163,7 @@ export function Modal({ title, children, onClose }: ModalProps) {
     >
       <div className="dialog-header">
         <div>
-          <p className="eyebrow">maz / РЕГИСТРАТУРА</p>
+          <p className="eyebrow">maz / Регистратура</p>
           <h2 id={titleId}>{title}</h2>
         </div>
         <button

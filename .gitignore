@@ -11,6 +11,10 @@ bin-release/
 *.zip
 hospital-zip-parts/
 
+# Local browser verification artifacts
+.playwright-cli/
+output/playwright/
+
 # Executables
 *.swf
 *.air

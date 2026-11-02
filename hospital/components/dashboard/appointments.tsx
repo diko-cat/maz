@@ -20,12 +20,12 @@ function AppointmentRow({ appointment, model, overview }: {
   const canCancel = appointment.status === "confirmed" || appointment.status === "pending";
 
   return (
-    <tr className="border-t border-slate-100">
+    <tr className="border-t border-slate-100 transition-colors hover:bg-slate-50">
       <td className="whitespace-nowrap px-6 py-4">
-        <div className="font-semibold text-slate-700">{appointment.time}</div>
-        {!overview && <div className="mt-1 text-xs text-slate-400">{formatDate(appointment.date)}</div>}
+        <div className="font-mono text-base font-medium tabular-nums text-slate-800">{appointment.time}</div>
+        {!overview && <div className="mt-1 text-xs text-slate-500">{formatDate(appointment.date)}</div>}
       </td>
-      <td className="px-6 py-4 font-medium text-slate-700">{patient?.name}</td>
+      <td className="px-6 py-4 font-medium text-slate-800">{patient?.name}</td>
       <td className="px-6 py-4 text-slate-500">{doctor?.name}</td>
       <td className="px-6 py-4">
         <span className={`inline-flex whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ${statusColors[appointment.status]}`}>

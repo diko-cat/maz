@@ -1,39 +1,28 @@
-import { CalendarDays, Clock3, HeartPulse, Plus, Stethoscope, Users } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { DashboardModel, Stat } from "@/lib/types";
 import { AppointmentsSection } from "./appointments";
 import { PatientsSection } from "./patients";
-import { avatarColors, styles } from "./shared";
+import { styles } from "./shared";
 
-const statIcons = { patients: Users, doctors: Stethoscope, appointments: CalendarDays, today: Clock3 };
-
-function StatCard({ stat, index }: { stat: Stat; index: number }) {
-  const Icon = statIcons[stat.kind];
+function StatCard({ stat }: { stat: Stat }) {
   return (
-    <div className={`${styles.panel} p-5`}>
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <p className="text-xs font-medium text-slate-500">{stat.label}</p>
-        <span className={`rounded-lg p-2 ${avatarColors[index % avatarColors.length]}`}><Icon size={18} /></span>
-      </div>
-      <div className="text-3xl font-semibold tracking-tight text-slate-800">{stat.value}</div>
-      <p className="mt-2 text-[11px] text-slate-400">{stat.detail}</p>
+    <div className="p-4 sm:p-6">
+      <p className="text-sm text-slate-600">{stat.label}</p>
+      <div className={`my-3 text-3xl sm:text-4xl font-medium tracking-tight tabular-nums ${stat.kind === "today" ? "text-teal-800" : "text-slate-900"}`}>{stat.value}</div>
+      <p className="text-xs leading-relaxed text-slate-500">{stat.detail}</p>
     </div>
   );
 }
 
 function WelcomeBanner({ onAddAppointment }: { onAddAppointment: () => void }) {
   return (
-    <section className="relative flex items-center justify-between overflow-hidden rounded-2xl bg-[#e5f1ef] px-7 py-8 sm:px-9">
-      <div className="relative z-10 max-w-lg">
-        <p className="mb-3 text-[10px] font-bold tracking-[.18em] text-teal-700">ЗАБОТА НАЧИНАЕТСЯ С ПОРЯДКА</p>
-        <h2 className="mb-3 text-2xl font-semibold tracking-tight text-[#204b47] sm:text-[28px]">Хороший день для заботы.</h2>
-        <p className="mb-6 max-w-sm text-sm leading-relaxed text-[#61827e]">Пациенты, специалисты и расписание — всё, что нужно для работы вашей клиники.</p>
-        <button type="button" className={styles.primary} onClick={onAddAppointment}><Plus size={16} />Записать на приём</button>
+    <section className="flex flex-col justify-between gap-6 rounded-2xl border border-teal-900/10 bg-teal-50 px-6 py-6 sm:px-8 lg:flex-row lg:items-center">
+      <div className="max-w-lg">
+        <p className="mb-2 text-xs font-medium text-teal-800">Регистратура maz</p>
+        <h2 className="text-xl font-medium tracking-tight text-slate-900 sm:text-2xl">Забота начинается с порядка</h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">Пациенты, специалисты и расписание — всё для работы клиники</p>
       </div>
-      <div className="relative hidden size-44 shrink-0 items-center justify-center rounded-full border border-teal-700/10 bg-white/30 min-[950px]:flex">
-        <span className="absolute -inset-6 rounded-full border border-teal-700/5" />
-        <HeartPulse size={88} strokeWidth={1} className="text-teal-700/60" />
-        <span className="absolute -bottom-1 rounded-full border border-white bg-white/90 px-4 py-2 text-[10px] font-medium tracking-wide text-teal-700">РЯДОМ С ПАЦИЕНТОМ</span>
-      </div>
+      <button type="button" className={`${styles.primary} shrink-0 self-start lg:self-center`} onClick={onAddAppointment}><Plus size={18} strokeWidth={1.5} />Записать на приём</button>
     </section>
   );
 }
@@ -42,8 +31,8 @@ export function OverviewSection({ model }: { model: DashboardModel }) {
   return (
     <>
       <WelcomeBanner onAddAppointment={model.onAddAppointment} />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {model.stats.map((stat, index) => <StatCard key={stat.kind} stat={stat} index={index} />)}
+      <div className={`${styles.panel} grid grid-cols-2 [&>div]:border-slate-200 [&>div:nth-child(even)]:border-l [&>div:nth-child(n+3)]:border-t xl:grid-cols-4 xl:[&>div+div]:border-l xl:[&>div:nth-child(n+3)]:border-t-0`}>
+        {model.stats.map((stat) => <StatCard key={stat.kind} stat={stat} />)}
       </div>
       <AppointmentsSection model={model} overview />
       <PatientsSection model={model} overview />

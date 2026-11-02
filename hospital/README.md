@@ -35,7 +35,7 @@ npm run dev
 - `lib/selectors.ts` вычисляет результаты поиска, сортировку и показатели обзора.
 - `lib/storage.ts` проверяет и читает сохранённые данные, `lib/hospital-store.ts` связывает их с React.
 - `lib/types.ts` описывает общие данные и интерфейсы компонентов, `lib/format.ts` отвечает за отображение.
-- `app/globals.css` подключает Tailwind и отдельные стили из `app/styles/`.
+- `app/globals.css` подключает Tailwind; оболочка и экраны используют utility-классы, общие стили форм в `app/styles/forms.css` собраны через `@apply`.
 
 ## Возможности текущего этапа
 

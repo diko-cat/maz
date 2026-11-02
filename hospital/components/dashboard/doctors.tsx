@@ -10,12 +10,12 @@ function DoctorCard({ doctor, index }: { doctor: Doctor; index: number }) {
           {initials(doctor.name)}
         </div>
         <div>
-          <h3 className="font-semibold text-slate-800">{doctor.name}</h3>
+          <h3 className="font-medium text-slate-800">{doctor.name}</h3>
           <p className="mt-1 text-sm text-slate-500">{doctor.specialty}</p>
         </div>
       </div>
       <div className="flex items-center justify-between border-t border-slate-100 pt-4">
-        <span className="text-xs text-slate-400">Кабинет {doctor.room}</span>
+        <span className="text-xs text-slate-500">Кабинет {doctor.room}</span>
         <span className={`rounded-md px-2.5 py-1 text-xs ${doctor.available ? "bg-teal-50 text-teal-700" : "bg-slate-100 text-slate-500"}`}>
           {doctor.available ? "Ведёт приём" : "Нет приёма"}
         </span>
@@ -29,8 +29,8 @@ export function DoctorsSection({ model }: { model: DashboardModel }) {
     <>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-semibold text-slate-800">Наши специалисты</h2>
-          <p className="mt-1 text-sm text-slate-500">Команда, которой доверяют</p>
+          <h2 className="text-xl font-medium text-slate-800">Наши специалисты</h2>
+          <p className="mt-1 text-sm text-slate-500">Специальности, кабинеты и доступность для записи</p>
         </div>
         <div className="w-full sm:w-80">
           <SearchField placeholder="Поиск по имени и специальности" query={model.query} onQueryChange={model.setQuery} />

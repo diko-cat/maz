@@ -12,8 +12,8 @@ export default function ClinicApp() {
   const { store, model } = clinic;
 
   return (
-    <div className="app-shell">
-      <a href="#main-content" className="skip-link">Перейти к содержимому</a>
+    <div className="min-h-screen">
+      <a href="#main-content" className="fixed left-4 top-4 z-50 -translate-y-24 rounded-lg bg-white px-4 py-3 text-sm text-teal-800 shadow-sm focus:translate-y-0">Перейти к содержимому</a>
       <ClinicSidebar
         section={model.section}
         patientCount={store.patients.length}
@@ -22,22 +22,22 @@ export default function ClinicApp() {
         onClose={clinic.closeSidebar}
         onHelp={clinic.openHelp}
       />
-      <div className="app-workspace">
+      <div className="min-h-screen md:ml-64">
         <ClinicHeader
           section={model.section}
           sidebarOpen={clinic.sidebarOpen}
           onToggleSidebar={clinic.toggleSidebar}
         />
-        <main id="main-content" className="app-main" tabIndex={-1}>
+        <main id="main-content" className="mx-auto max-w-[1600px] px-4 py-8 sm:px-8" tabIndex={-1}>
           <PageHeading section={model.section} today={store.today} ready={store.ready} />
           {store.storageWarning && <p className="notice" role="status">{store.storageWarning}</p>}
           {store.ready ? <ClinicDashboard model={model} /> : (
-            <div className="loading-state" role="status">
+            <div className="grid min-h-80 place-content-center justify-items-center gap-4 text-sm text-slate-500" role="status">
               <HeartPulse size={30} aria-hidden="true" />
               Загружаем данные клиники…
             </div>
           )}
-          <footer className="app-footer">
+          <footer className="mt-8 flex flex-wrap items-center justify-between gap-2 border-t border-slate-200 pt-6 text-xs text-slate-500">
             <span>© 2026 maz · Забота в каждом действии</span>
             <span>Демонстрационные данные</span>
           </footer>

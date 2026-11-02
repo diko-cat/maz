@@ -29,15 +29,15 @@ function PatientFilters({ model }: { model: DashboardModel }) {
 
 function PatientRow({ patient, index, model }: { patient: Patient; index: number; model: DashboardModel }) {
   return (
-    <tr className="border-t border-slate-100 transition hover:bg-slate-50/70">
+    <tr className="border-t border-slate-100 transition-colors hover:bg-slate-50/70">
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           <span className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarColors[index % avatarColors.length]}`}>
             {initials(patient.name)}
           </span>
           <div>
-            <div className="font-semibold text-slate-700">{patient.name}</div>
-            <div className="mt-1 text-xs text-slate-400">{patient.id} · {patient.gender === "female" ? "Женский" : "Мужской"}</div>
+            <div className="font-medium text-slate-800">{patient.name}</div>
+            <div className="mt-1 text-xs text-slate-500">{patient.id} · {patient.gender === "female" ? "Женский" : "Мужской"}</div>
           </div>
         </div>
       </td>
@@ -46,10 +46,10 @@ function PatientRow({ patient, index, model }: { patient: Patient; index: number
       <td className="whitespace-nowrap px-4 py-4 text-slate-500">{formatDate(patient.registeredAt)}</td>
       <td className="px-6 py-4">
         <div className="flex justify-end gap-1">
-          <button type="button" aria-label={`Редактировать: ${patient.name}`} className="rounded-md p-2 text-slate-400 hover:bg-teal-50 hover:text-teal-700" onClick={() => model.onEditPatient(patient)}>
+          <button type="button" aria-label={`Редактировать: ${patient.name}`} className="grid size-11 place-items-center rounded-lg text-slate-500 hover:bg-teal-50 hover:text-teal-700" onClick={() => model.onEditPatient(patient)}>
             <Pencil size={16} />
           </button>
-          <button type="button" aria-label={`Удалить: ${patient.name}`} className="rounded-md p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600" onClick={() => model.onDeletePatient(patient)}>
+          <button type="button" aria-label={`Удалить: ${patient.name}`} className="grid size-11 place-items-center rounded-lg text-slate-500 hover:bg-rose-50 hover:text-rose-600" onClick={() => model.onDeletePatient(patient)}>
             <Trash2 size={16} />
           </button>
         </div>
@@ -100,7 +100,7 @@ export function PatientsSection({ model, overview = false }: { model: DashboardM
           </table>
         </div>
       )}
-      <div className="border-t border-slate-100 px-6 py-3 text-xs text-slate-400">
+      <div className="border-t border-slate-100 px-6 py-3 text-xs text-slate-500">
         {overview ? `Всего пациентов в клинике: ${model.patients.length}` : "Изменения сохраняются в этом браузере"}
       </div>
     </section>
