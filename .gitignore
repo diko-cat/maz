@@ -7,6 +7,10 @@ bin-release/
 # Other files and folders
 .settings/
 
+# Local project archives
+*.zip
+hospital-zip-parts/
+
 # Executables
 *.swf
 *.air

@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Hospital: check",
+      "type": "npm",
+      "script": "check",
+      "path": "hospital",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Hospital: dev",
+      "type": "npm",
+      "script": "dev",
+      "path": "hospital",
+      "problemMatcher": []
+    }
+  ]
+}
