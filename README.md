@@ -12,7 +12,7 @@
 
 Из корня репозитория:
 
-```bash
+```bash 
 cd hospital
 npm ci
 npm run dev
