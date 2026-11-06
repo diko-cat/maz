@@ -1,0 +1,12 @@
+const express = require('express');
+const controller = require('./controllers');
+const { validateBody } = require('./middleware');
+const validators = require('./validators');
+const router = express.Router();
+router.get('/doctor', controller.doctor);
+router.get('/services', controller.services);
+router.get('/schedule', controller.schedule);
+router.post('/appointments', validateBody(validators.appointment), controller.createAppointment);
+router.get('/reviews', controller.reviews);
+router.post('/reviews', validateBody(validators.review), controller.createReview);
+module.exports = router;

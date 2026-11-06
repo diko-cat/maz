@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { doctors, type PatientDraft } from "@/lib/data";
 import { updateHospital, useHospitalStore } from "@/lib/hospital-store";
 import { selectDashboard } from "@/lib/selectors";
 import type { Appointment, DashboardModel, Patient, Section } from "@/lib/types";
+import { getProfileSnapshot, getServerProfileSnapshot, subscribeProfile, writeProfile } from "@/lib/profile-store";
+import type { UserProfile } from "./clinic-shell";
 
 function createId(prefix: "P" | "A"): string {
   return `${prefix}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
@@ -22,6 +24,11 @@ export function useClinicDashboard() {
   const [help, setHelp] = useState(false);
   const [toast, setToast] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const profile = useSyncExternalStore(subscribeProfile, getProfileSnapshot, getServerProfileSnapshot);
+
+  function saveProfile(next: UserProfile) {
+    setToast(writeProfile(next) ? "Профиль сохранён" : "Профиль обновлён до перезагрузки страницы");
+  }
 
   function setSection(next: Section) {
     setCurrentSection(next);
@@ -97,6 +104,8 @@ export function useClinicDashboard() {
   return {
     store,
     model,
+    profile,
+    saveProfile,
     editor,
     closePatientEditor: () => setEditor(null),
     savePatient,

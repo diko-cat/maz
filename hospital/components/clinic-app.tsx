@@ -21,17 +21,19 @@ export default function ClinicApp() {
         onNavigate={model.setSection}
         onClose={clinic.closeSidebar}
         onHelp={clinic.openHelp}
+        profile={clinic.profile}
       />
       <div className="min-h-screen md:ml-64">
         <ClinicHeader
           section={model.section}
           sidebarOpen={clinic.sidebarOpen}
           onToggleSidebar={clinic.toggleSidebar}
+          profile={clinic.profile}
         />
         <main id="main-content" className="mx-auto max-w-[1600px] px-4 py-8 sm:px-8" tabIndex={-1}>
           <PageHeading section={model.section} today={store.today} ready={store.ready} />
           {store.storageWarning && <p className="notice" role="status">{store.storageWarning}</p>}
-          {store.ready ? <ClinicDashboard model={model} /> : (
+          {store.ready ? <ClinicDashboard model={model} profile={clinic.profile} onSaveProfile={clinic.saveProfile} /> : (
             <div className="grid min-h-80 place-content-center justify-items-center gap-4 text-sm text-slate-500" role="status">
               <HeartPulse size={30} aria-hidden="true" />
               Загружаем данные клиники…

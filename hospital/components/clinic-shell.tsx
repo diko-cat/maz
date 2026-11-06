@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   Activity, ArrowUpRight, CalendarDays, CircleHelp, HeartPulse,
-  LayoutDashboard, PanelLeftClose, PanelLeftOpen, Stethoscope, Users,
+  LayoutDashboard, PanelLeftClose, PanelLeftOpen, Stethoscope, Users, UserRound,
 } from "lucide-react";
 import { formatDate } from "@/lib/format";
 import type { Section } from "@/lib/types";
@@ -11,9 +11,22 @@ const sections = {
   patients: { label: "Пациенты", description: "Информация о пациентах и история регистрации", icon: Users },
   doctors: { label: "Врачи", description: "Специалисты и кабинеты вашей клиники", icon: Stethoscope },
   appointments: { label: "Записи на приём", description: "Расписание и управление записями", icon: CalendarDays },
+  profile: { label: "Профиль", description: "Ваши контактные данные и настройки аккаунта", icon: UserRound },
 } satisfies Record<Section, { label: string; description: string; icon: typeof Users }>;
 
-const sectionOrder: Section[] = ["overview", "patients", "doctors", "appointments"];
+const sectionOrder: Section[] = ["overview", "patients", "doctors", "appointments", "profile"];
+
+export interface UserProfile {
+  name: string;
+  role: string;
+  email: string;
+  phone: string;
+}
+
+export const defaultProfile: UserProfile = { name: "Администратор клиники", role: "Администратор", email: "", phone: "" };
+export function profileInitials(name: string): string {
+  return name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]?.toLocaleUpperCase("ru") ?? "").join("") || "А";
+}
 
 interface SidebarProps {
   section: Section;
@@ -22,9 +35,10 @@ interface SidebarProps {
   onNavigate: (section: Section) => void;
   onClose: () => void;
   onHelp: () => void;
+  profile: UserProfile;
 }
 
-export function ClinicSidebar({ section, patientCount, open, onNavigate, onClose, onHelp }: SidebarProps) {
+export function ClinicSidebar({ section, patientCount, open, onNavigate, onClose, onHelp, profile }: SidebarProps) {
   return (
     <>
       {open && <button className="fixed inset-0 z-30 bg-slate-950/30 md:hidden" aria-label="Закрыть меню" onClick={onClose} />}
@@ -64,8 +78,8 @@ export function ClinicSidebar({ section, patientCount, open, onNavigate, onClose
             <ArrowUpRight size={14} aria-hidden="true" />
           </button>
           <div className="mt-4 flex items-center gap-3 px-3 py-2 [&_strong]:block [&_strong]:text-sm [&_strong]:font-medium [&_small]:block [&_small]:text-xs [&_small]:text-slate-500">
-            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-slate-100 text-xs font-medium text-slate-700">ДК</span>
-            <div><strong>Демо-клиника</strong><small>Администратор</small></div>
+            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-slate-100 text-xs font-medium text-slate-700">{profileInitials(profile.name)}</span>
+            <div className="min-w-0"><strong className="truncate">{profile.name}</strong><small>{profile.role}</small></div>
             <span className="ml-auto size-1.5 shrink-0 rounded-full bg-teal-700" title="Локальный режим" />
           </div>
         </div>
@@ -78,9 +92,10 @@ interface HeaderProps {
   section: Section;
   sidebarOpen: boolean;
   onToggleSidebar: () => void;
+  profile: UserProfile;
 }
 
-export function ClinicHeader({ section, sidebarOpen, onToggleSidebar }: HeaderProps) {
+export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }: HeaderProps) {
   const MenuIcon = sidebarOpen ? PanelLeftClose : PanelLeftOpen;
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-8">
@@ -100,7 +115,7 @@ export function ClinicHeader({ section, sidebarOpen, onToggleSidebar }: HeaderPr
       </div>
       <div className="flex shrink-0 items-center gap-5">
         <span className="hidden items-center gap-2 text-xs text-slate-500 before:size-1.5 before:rounded-full before:bg-teal-700 sm:flex">Локальный режим</span>
-        <span className="grid size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600">ДК</span>
+        <span className="grid size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600" aria-label={profile.name}>{profileInitials(profile.name)}</span>
       </div>
     </header>
   );

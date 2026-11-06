@@ -1,4 +1,4 @@
-export type Section = "overview" | "patients" | "doctors" | "appointments";
+export type Section = "overview" | "patients" | "doctors" | "appointments" | "profile";
 export type PatientGender = "female" | "male";
 export type AppointmentStatus = "confirmed" | "pending" | "completed" | "cancelled";
 
