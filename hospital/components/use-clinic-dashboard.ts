@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { doctors, type PatientDraft } from "@/lib/data";
 import { updateHospital, useHospitalStore } from "@/lib/hospital-store";
 import { selectDashboard } from "@/lib/selectors";
@@ -21,6 +21,8 @@ export function useClinicDashboard() {
   const [editor, setEditor] = useState<Patient | "new" | null>(null);
   const [deleting, setDeleting] = useState<Patient | null>(null);
   const [appointmentEditor, setAppointmentEditor] = useState(false);
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>();
+  const [cancelling, setCancelling] = useState<Appointment | null>(null);
   const [help, setHelp] = useState(false);
   const [toast, setToast] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -30,10 +32,25 @@ export function useClinicDashboard() {
     setToast(writeProfile(next) ? "Профиль сохранён" : "Профиль обновлён до перезагрузки страницы");
   }
 
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    function closeOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape" && !event.defaultPrevented) setSidebarOpen(false);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [sidebarOpen]);
+
   function setSection(next: Section) {
     setCurrentSection(next);
     setQuery("");
     setSidebarOpen(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }
 
   function savePatient(draft: PatientDraft) {
@@ -77,6 +94,16 @@ export function useClinicDashboard() {
       )),
     });
     setToast("Запись отменена");
+    setCancelling(null);
+  }
+
+  function completeAppointment(target: Appointment) {
+    updateHospital({
+      patients: store.patients,
+      appointments: store.appointments.map((appointment) => appointment.id === target.id
+        ? { ...appointment, status: "completed" } : appointment),
+    });
+    setToast("Приём завершён");
   }
 
   const model: DashboardModel = {
@@ -97,8 +124,12 @@ export function useClinicDashboard() {
     onAddPatient: () => setEditor("new"),
     onEditPatient: setEditor,
     onDeletePatient: setDeleting,
-    onAddAppointment: () => setAppointmentEditor(true),
-    onCancelAppointment: cancelAppointment,
+    onAddAppointment: (doctorId) => {
+      setSelectedDoctorId(doctorId);
+      setAppointmentEditor(true);
+    },
+    onCancelAppointment: setCancelling,
+    onCompleteAppointment: completeAppointment,
   };
 
   return {
@@ -113,6 +144,10 @@ export function useClinicDashboard() {
     closeDeleteDialog: () => setDeleting(null),
     deletePatient,
     appointmentEditor,
+    selectedDoctorId,
+    cancelling,
+    closeCancelDialog: () => setCancelling(null),
+    confirmCancelAppointment: () => { if (cancelling) cancelAppointment(cancelling); },
     closeAppointmentEditor: () => setAppointmentEditor(false),
     saveAppointment,
     help,

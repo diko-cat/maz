@@ -1,10 +1,10 @@
 "use client";
 
-import { HeartPulse } from "lucide-react";
+import { HeartPulse } from "@/components/icons";
 import { AppointmentEditor, PatientEditor } from "./clinic-dialogs";
 import ClinicDashboard from "./clinic-dashboard";
 import { ClinicHeader, ClinicSidebar, PageHeading } from "./clinic-shell";
-import { AboutClinic, DeletePatientDialog, Notification } from "./clinic-notices";
+import { AboutClinic, CancelAppointmentDialog, DeletePatientDialog, Notification } from "./clinic-notices";
 import { useClinicDashboard } from "./use-clinic-dashboard";
 
 export default function ClinicApp() {
@@ -59,6 +59,7 @@ export default function ClinicApp() {
           patients={store.patients}
           appointments={store.appointments}
           today={store.today}
+          initialDoctorId={clinic.selectedDoctorId}
           onSave={clinic.saveAppointment}
           onClose={clinic.closeAppointmentEditor}
         />
@@ -71,6 +72,7 @@ export default function ClinicApp() {
         />
       )}
       {clinic.help && <AboutClinic onClose={clinic.closeHelp} />}
+      {clinic.cancelling && <CancelAppointmentDialog appointment={clinic.cancelling} onConfirm={clinic.confirmCancelAppointment} onClose={clinic.closeCancelDialog} />}
       {clinic.toast && <Notification message={clinic.toast} onClose={clinic.closeToast} />}
     </div>
   );

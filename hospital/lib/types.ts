@@ -68,8 +68,9 @@ export interface DashboardActions {
   onAddPatient: () => void;
   onEditPatient: (patient: Patient) => void;
   onDeletePatient: (patient: Patient) => void;
-  onAddAppointment: () => void;
+  onAddAppointment: (doctorId?: string) => void;
   onCancelAppointment: (appointment: Appointment) => void;
+  onCompleteAppointment: (appointment: Appointment) => void;
 }
 
 export interface DashboardModel extends HospitalData, DashboardFilters, DashboardSelection, DashboardActions {

@@ -2,13 +2,16 @@
 @import "./styles/forms.css";
 
 @theme inline {
-  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-sans: "Segoe UI Variable", "Segoe UI", Arial, sans-serif;
   --font-mono: Consolas, monospace;
 }
 
 @layer base {
   :root { color-scheme: light; }
-  body { @apply m-0 min-w-80 bg-slate-50 font-sans text-slate-800 antialiased; }
+  body { @apply m-0 min-w-80 bg-[#f4f6f8] font-sans text-slate-800 antialiased; }
+  h1, h2, h3 { @apply text-balance; }
+  dialog:modal { @apply overscroll-contain; }
+  body:has(dialog[open]) { @apply overflow-hidden; }
   button { @apply cursor-pointer; }
   button:disabled { @apply cursor-not-allowed opacity-50; }
   :focus-visible { @apply outline-2 outline-offset-4 outline-teal-700; }

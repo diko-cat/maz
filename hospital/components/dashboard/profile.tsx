@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Mail, Phone, UserRound } from "lucide-react";
+import { Mail, Phone, UserRound } from "@/components/icons";
 import { styles } from "./shared";
 import { profileInitials, type UserProfile } from "../clinic-shell";
 

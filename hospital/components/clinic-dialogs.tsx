@@ -11,7 +11,7 @@ import {
   type ReactNode,
   type SyntheticEvent,
 } from "react";
-import { X } from "lucide-react";
+import { X } from "@/components/icons";
 import {
   appointmentError,
   doctors,
@@ -37,6 +37,7 @@ type AppointmentEditorProps = {
   patients: Patient[];
   appointments: Appointment[];
   today: string;
+  initialDoctorId?: string;
   onSave: (data: Omit<Appointment, "id">) => void;
   onClose: () => void;
 };
@@ -117,6 +118,7 @@ function PatientInput({
         min={isBirthDate ? "1900-01-01" : undefined}
         max={isBirthDate ? today : undefined}
         autoComplete={patientAutocomplete[name]}
+        spellCheck={name === "email" ? false : undefined}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-error` : undefined}
         onChange={(event) => onChange(name, event.target.value)}
@@ -208,7 +210,11 @@ export function PatientEditor({ patient, today, onSave, onClose }: PatientEditor
     event.preventDefault();
     const nextErrors = validatePatient(draft, today);
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length) return;
+    const firstError = Object.keys(nextErrors)[0];
+    if (firstError) {
+      event.currentTarget.querySelector<HTMLInputElement>(`[name="${firstError}"]`)?.focus();
+      return;
+    }
 
     onSave({
       ...draft,
@@ -296,13 +302,14 @@ export function AppointmentEditor({
   patients,
   appointments,
   today,
+  initialDoctorId,
   onSave,
   onClose,
 }: AppointmentEditorProps) {
   const availableDoctors = doctors.filter((doctor) => doctor.available);
   const [draft, setDraft] = useState<AppointmentDraft>(() => ({
     patientId: patients[0]?.id ?? "",
-    doctorId: availableDoctors[0]?.id ?? "",
+    doctorId: initialDoctorId ?? availableDoctors[0]?.id ?? "",
     date: today,
     time: "09:00",
   }));
