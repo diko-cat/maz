@@ -2,9 +2,10 @@ import Link from "next/link";
 import {
   Activity, ArrowUpRight, CalendarDays, CircleHelp, HeartPulse,
   LayoutDashboard, PanelLeftClose, PanelLeftOpen, Stethoscope, Users, UserRound,
-} from "lucide-react";
+} from "@/components/icons";
 import { formatDate } from "@/lib/format";
 import type { Section } from "@/lib/types";
+import { ClinicUserMenu } from "./clinic-user-menu";
 
 const sections = {
   overview: { label: "Обзор", description: "Всё о работе клиники в одном месте", icon: LayoutDashboard },
@@ -42,46 +43,42 @@ export function ClinicSidebar({ section, patientCount, open, onNavigate, onClose
   return (
     <>
       {open && <button className="fixed inset-0 z-30 bg-slate-950/30 md:hidden" aria-label="Закрыть меню" onClick={onClose} />}
-      <aside id="app-sidebar" className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col overflow-y-auto border-r border-slate-200 bg-white p-5 transition-transform duration-200 motion-reduce:transition-none md:translate-x-0 ${open ? "translate-x-0 visible" : "-translate-x-full invisible md:visible"}`}>
-        <Link href="/" className="flex items-center gap-3 px-3 py-2 text-3xl font-semibold tracking-tight text-slate-900">
-          <span className="grid size-10 place-items-center rounded-xl bg-teal-800 text-white"><HeartPulse size={25} strokeWidth={1.5} aria-hidden="true" /></span>
-          <span>maz<span className="text-teal-700">.</span></span>
+      <aside id="app-sidebar" className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col overflow-y-auto bg-slate-950 p-5 text-white transition-transform duration-200 motion-reduce:transition-none md:translate-x-0 ${open ? "translate-x-0 visible" : "-translate-x-full invisible md:visible"}`}>
+        <Link href="/" aria-label="maz — главная" className="flex items-center gap-3 px-3 py-3 text-3xl font-semibold tracking-tight text-white">
+          <span className="grid size-10 place-items-center rounded-xl bg-teal-300 text-slate-950"><HeartPulse size={25} strokeWidth={1.5} /></span>
+          <span>maz<span className="text-teal-300">.</span></span>
         </Link>
-        <div className="mb-3 mt-10 px-3 text-xs font-medium text-slate-500">Управление клиникой</div>
+        <div className="mb-3 mt-10 px-3 text-xs font-medium text-slate-400">Управление клиникой</div>
         <nav aria-label="Основная навигация" className="flex flex-col gap-1">
           {sectionOrder.map((id) => {
             const { label, icon: Icon } = sections[id];
             return (
               <button
                 key={id}
-                className={`flex min-h-11 w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors md:min-h-10 ${section === id ? "bg-teal-50 font-semibold text-teal-800 ring-1 ring-inset ring-teal-900/10" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"}`}
+                className={`flex min-h-12 w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm transition-colors ${section === id ? "bg-white/10 font-medium text-teal-200 ring-1 ring-inset ring-white/10" : "text-slate-400 hover:bg-white/5 hover:text-white"}`}
                 onClick={() => onNavigate(id)}
                 aria-current={section === id ? "page" : undefined}
               >
                 <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
                 <span>{label}</span>
-                {id === "patients" && <span className="ml-auto font-mono text-xs tabular-nums text-slate-500">{patientCount}</span>}
+                {id === "patients" && <span className="ml-auto rounded-md bg-white/5 px-2 py-1 text-xs tabular-nums text-slate-400">{patientCount}</span>}
               </button>
             );
           })}
         </nav>
-        <div className="mt-auto px-3 pb-6 pt-16 text-xs leading-relaxed text-slate-500 [&_h2]:mb-2 [&_h2]:text-sm [&_h2]:font-medium [&_h2]:text-slate-800">
-          <span className="mb-4 block text-teal-700"><Activity size={20} aria-hidden="true" /></span>
-          <h2>Больше времени для людей</h2>
-          <p>Пациенты и расписание — под рукой</p>
-          <span className="mt-4 block text-xs text-slate-500"><span />Учебный проект</span>
+        <div className="mt-auto px-3 pb-8 pt-16 text-xs leading-relaxed text-slate-400 [&_h2]:mb-2 [&_h2]:text-sm [&_h2]:font-medium [&_h2]:text-white">
+          <span className="mb-4 block text-teal-300"><Activity size={24} /></span>
+          <h2>Рядом с пациентом</h2>
+          <p>Меньше рутины.<br />Больше времени для заботы.</p>
+          <span className="mt-4 inline-flex items-center gap-2 text-xs text-slate-400"><span className="size-1.5 rounded-full bg-teal-300" />Учебная клиника</span>
         </div>
-        <div className="border-t border-slate-200 pt-4">
-          <button className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-slate-600 transition-colors hover:bg-slate-100 [&_svg:last-child]:ml-auto" onClick={onHelp}>
+        <div className="border-t border-white/10 pt-4">
+          <button className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-slate-400 transition-colors hover:bg-white/5 hover:text-white [&_svg:last-child]:ml-auto" onClick={onHelp}>
             <CircleHelp size={18} aria-hidden="true" />
             О проекте
             <ArrowUpRight size={14} aria-hidden="true" />
           </button>
-          <div className="mt-4 flex items-center gap-3 px-3 py-2 [&_strong]:block [&_strong]:text-sm [&_strong]:font-medium [&_small]:block [&_small]:text-xs [&_small]:text-slate-500">
-            <span className="grid size-10 shrink-0 place-items-center rounded-full bg-slate-100 text-xs font-medium text-slate-700">{profileInitials(profile.name)}</span>
-            <div className="min-w-0"><strong className="truncate">{profile.name}</strong><small>{profile.role}</small></div>
-            <span className="ml-auto size-1.5 shrink-0 rounded-full bg-teal-700" title="Локальный режим" />
-          </div>
+          <ClinicUserMenu profile={profile} onProfile={() => onNavigate("profile")} />
         </div>
       </aside>
     </>
@@ -98,7 +95,7 @@ interface HeaderProps {
 export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }: HeaderProps) {
   const MenuIcon = sidebarOpen ? PanelLeftClose : PanelLeftOpen;
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-8">
+    <header className="sticky top-0 z-20 flex h-18 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-8">
       <div className="flex min-w-0 items-center gap-3 text-sm text-slate-500 [&>span]:hidden lg:[&>span]:inline [&_strong]:truncate [&_strong]:font-medium [&_strong]:text-slate-800">
         <button
           className="grid size-11 shrink-0 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 md:hidden"
@@ -114,7 +111,7 @@ export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }:
         <strong>{sections[section].label}</strong>
       </div>
       <div className="flex shrink-0 items-center gap-5">
-        <span className="hidden items-center gap-2 text-xs text-slate-500 before:size-1.5 before:rounded-full before:bg-teal-700 sm:flex">Локальный режим</span>
+        <span className="hidden items-center gap-2 text-xs text-slate-500 before:size-1.5 before:rounded-full before:bg-teal-700 sm:flex">Рабочее пространство клиники</span>
         <span className="grid size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600" aria-label={profile.name}>{profileInitials(profile.name)}</span>
       </div>
     </header>
@@ -124,9 +121,8 @@ export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }:
 export function PageHeading({ section, today, ready }: { section: Section; today: string; ready: boolean }) {
   const { label, description } = sections[section];
   return (
-    <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:text-slate-900 sm:[&_h1]:text-4xl">
+    <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:text-slate-900 sm:[&_h1]:text-4xl">
       <div>
-        <p className="mb-2 text-xs font-medium text-slate-500">Клиника · Рабочий день</p>
         <h1>{section === "overview" ? "Обзор клиники" : label}</h1>
         <p className="mt-3 text-sm leading-relaxed text-slate-500">{description}</p>
       </div>

@@ -1,4 +1,4 @@
-import { ArrowRight, Pencil, Plus, Trash2 } from "lucide-react";
+import { ArrowRight, Pencil, Plus, Trash2 } from "@/components/icons";
 import { formatDate, initials } from "@/lib/format";
 import type { DashboardModel, Patient } from "@/lib/types";
 import { avatarColors, EmptyState, PanelHeading, SearchField, styles } from "./shared";

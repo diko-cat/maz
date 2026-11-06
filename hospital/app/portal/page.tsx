@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, ClipboardList, HeartPulse, Stethoscope, Users, UserRound, Wallet } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { CalendarDays, ClipboardList, HeartPulse, Stethoscope, Users, UserRound, Wallet } from "@/components/icons";
 
 type Role = "patient" | "doctor" | "admin";
 const roles = [
@@ -21,20 +22,26 @@ function Panel({ title, children, icon: Icon }: { title: string; children: React
 }
 
 export default function PortalPage() {
-  const [role, setRole] = useState<Role>("patient");
+  return <Suspense fallback={<main className="mx-auto max-w-6xl px-4 py-12 text-sm text-slate-600" role="status">Открываем кабинет…</main>}><PortalContent /></Suspense>;
+}
+
+function PortalContent() {
+  const params = useSearchParams();
+  const requestedRole = params.get("role");
+  const role: Role = requestedRole === "doctor" || requestedRole === "admin" ? requestedRole : "patient";
   const [booked, setBooked] = useState("");
-  const [service, setService] = useState(services[0].name);
+  const [service, setService] = useState<string>(services[0].name);
   const [time, setTime] = useState("");
 
   return <main className="mx-auto min-h-screen max-w-6xl px-4 py-8 sm:px-8 sm:py-12">
     <header className="mb-10 flex flex-wrap items-center justify-between gap-4">
-      <div><Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-teal-800"><HeartPulse size={20} /> maz.</Link><p className="text-xs font-medium uppercase tracking-wider text-teal-800">Личный кабинет</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Выберите роль</h1><p className="mt-2 text-slate-600">Данные и возможности кабинета зависят от выбранной роли.</p></div>
+      <div><Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-teal-800"><HeartPulse size={20} /> maz.</Link><p className="text-sm font-medium text-teal-800">Личный кабинет</p><h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">{role === "patient" ? "Кабинет пациента" : role === "doctor" ? "Кабинет врача" : "Кабинет администратора"}</h1><p className="mt-2 text-slate-600">Данные и возможности кабинета зависят от выбранной роли.</p></div>
       <span className="rounded-full bg-amber-50 px-3 py-2 text-xs text-amber-800">Демонстрационный режим</span>
     </header>
 
-    <div className="mb-8 grid gap-3 sm:grid-cols-3" role="group" aria-label="Выбор роли">
-      {roles.map(({ id, title, description, icon: Icon }) => <button key={id} onClick={() => setRole(id)} aria-pressed={role === id} className={`rounded-2xl border p-5 text-left transition hover:-translate-y-0.5 hover:shadow-sm ${role === id ? "border-teal-700 bg-teal-50 ring-2 ring-teal-700/15" : "border-slate-200 bg-white"}`}><span className="mb-4 grid size-10 place-items-center rounded-xl bg-white text-teal-800"><Icon size={20} /></span><span className="block font-semibold text-slate-900">{title}</span><span className="mt-1 block text-sm text-slate-500">{description}</span></button>)}
-    </div>
+    <nav className="mb-8 grid gap-3 sm:grid-cols-3" aria-label="Выбор кабинета">
+      {roles.map(({ id, title, description, icon: Icon }) => <Link key={id} href={`/portal?role=${id}`} scroll={false} aria-current={role === id ? "page" : undefined} className={`rounded-2xl border p-5 text-left transition-colors duration-150 hover:bg-teal-50 active:bg-teal-100 ${role === id ? "border-teal-700 bg-teal-50 ring-2 ring-teal-700/15" : "border-slate-200 bg-white"}`}><span className="mb-4 grid size-10 place-items-center rounded-xl bg-white text-teal-800"><Icon size={20} /></span><span className="block font-semibold text-slate-900">{title}</span><span className="mt-1 block text-sm text-slate-500">{description}</span></Link>)}
+    </nav>
 
     {role === "patient" && <div className="grid gap-5 lg:grid-cols-2">
       <Panel title="Мои записи" icon={CalendarDays}><div className="rounded-xl bg-slate-50 p-4"><p className="font-medium text-slate-900">Мария Иванова · Терапевт</p><p className="mt-1 text-sm text-slate-500">12 ноября 2026 · 10:00</p><p className="mt-3 inline-flex rounded-full bg-teal-50 px-2.5 py-1 text-xs text-teal-800">Подтверждена</p></div><p className="mt-4 text-sm text-slate-500">Стоимость приёма: <strong className="text-slate-800">8 000 ₸</strong></p></Panel>
@@ -45,7 +52,7 @@ export default function PortalPage() {
 
     {role === "doctor" && <div className="grid gap-5 lg:grid-cols-2"><Panel title="Расписание на сегодня" icon={CalendarDays}><ul className="divide-y divide-slate-100">{[["09:00", "Айжан Садыкова", "Первичная консультация"], ["10:00", "Данияр Омаров", "Повторная консультация"], ["11:30", "Свободно", "Окно для записи"]].map(([t, n, detail]) => <li key={t} className="flex gap-4 py-3 text-sm"><strong>{t}</strong><span>{n}<small className="mt-1 block text-slate-500">{detail}</small></span></li>)}</ul></Panel><Panel title="Мои пациенты" icon={Users}><p className="text-3xl font-semibold">24</p><p className="text-sm text-slate-500">пациента за этот месяц</p><div className="mt-4 rounded-xl bg-slate-50 p-4 text-sm">Ближайший приём: сегодня в 09:00</div></Panel><Panel title="Услуги и стоимость" icon={Wallet}><ul className="divide-y divide-slate-100">{services.map((s) => <li key={s.name} className="flex justify-between py-3 text-sm"><span>{s.name}</span><strong>{s.price}</strong></li>)}</ul></Panel><Panel title="Отзывы пациентов" icon={HeartPulse}><p className="text-3xl font-semibold">4,9 <span className="text-amber-500">★</span></p><p className="mt-1 text-sm text-slate-500">На основе 38 отзывов</p><p className="mt-4 rounded-xl bg-slate-50 p-4 text-sm">«Врач внимательно выслушала и всё подробно объяснила.»</p></Panel></div>}
 
-    {role === "admin" && <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{[["Пациенты", "128", Users], ["Врачи", "12", Stethoscope], ["Записи сегодня", "18", CalendarDays], ["Выручка за месяц", "1 240 000 ₸", Wallet]].map(([label, value, Icon]) => <section key={label as string} className="rounded-2xl border border-slate-200 bg-white p-5"><Icon size={20} className="mb-4 text-teal-700" /><p className="text-sm text-slate-500">{label as string}</p><p className="mt-2 text-2xl font-semibold text-slate-900">{value as string}</p></section>)}<div className="sm:col-span-2 lg:col-span-4"><Panel title="Последние записи" icon={ClipboardList}><div className="overflow-x-auto"><table className="w-full min-w-[540px] text-left text-sm"><thead className="text-xs text-slate-500"><tr><th className="pb-3">Пациент</th><th>Врач</th><th>Дата</th><th>Услуга</th><th>Стоимость</th></tr></thead><tbody className="divide-y divide-slate-100">{[["Айжан Садыкова", "М. Иванова", "12 ноя, 10:00", "Консультация", "8 000 ₸"], ["Данияр Омаров", "М. Иванова", "12 ноя, 10:30", "Повторный приём", "6 000 ₸"]].map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell} className="py-3">{cell}</td>)}</tr>)}</tbody></table></div></Panel></div></div>}
+    {role === "admin" && <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{([["Пациенты", "128", Users], ["Врачи", "12", Stethoscope], ["Записи сегодня", "18", CalendarDays], ["Выручка за месяц", "1 240 000 ₸", Wallet]] as const).map(([label, value, Icon]) => <section key={label as string} className="rounded-2xl border border-slate-200 bg-white p-5"><Icon size={20} className="mb-4 text-teal-700" /><p className="text-sm text-slate-500">{label as string}</p><p className="mt-2 text-2xl font-semibold text-slate-900">{value as string}</p></section>)}<div className="sm:col-span-2 lg:col-span-4"><Panel title="Последние записи" icon={ClipboardList}><div className="overflow-x-auto"><table className="w-full min-w-[540px] text-left text-sm"><thead className="text-xs text-slate-500"><tr><th className="pb-3">Пациент</th><th>Врач</th><th>Дата</th><th>Услуга</th><th>Стоимость</th></tr></thead><tbody className="divide-y divide-slate-100">{[["Айжан Садыкова", "М. Иванова", "12 ноя, 10:00", "Консультация", "8 000 ₸"], ["Данияр Омаров", "М. Иванова", "12 ноя, 10:30", "Повторный приём", "6 000 ₸"]].map((row) => <tr key={row[0]}>{row.map((cell) => <td key={cell} className="py-3">{cell}</td>)}</tr>)}</tbody></table></div></Panel></div></div>}
 
     <p className="mt-8 text-xs text-slate-500">Демонстрационные сведения. Для настоящих аккаунтов, медицинских карт и платежей потребуется подключить серверную базу данных и авторизацию.</p>
   </main>;

@@ -1,11 +1,19 @@
-import { X } from "lucide-react";
-import type { Patient } from "@/lib/types";
+import { X } from "@/components/icons";
+import type { Appointment, Patient } from "@/lib/types";
+import { formatDate } from "@/lib/format";
 import { Modal } from "./clinic-dialogs";
 
 interface DeletePatientProps {
   patient: Patient;
   onConfirm: () => void;
   onClose: () => void;
+}
+
+export function CancelAppointmentDialog({ appointment, onConfirm, onClose }: { appointment: Appointment; onConfirm: () => void; onClose: () => void }) {
+  return <Modal title="Отменить запись?" onClose={onClose}>
+    <p className="dialog-description">Запись на {formatDate(appointment.date)} в {appointment.time} будет отменена. Время врача станет доступно для новой записи.</p>
+    <div className="dialog-actions"><button className="secondary-button" onClick={onClose}>Оставить запись</button><button className="danger-button" onClick={onConfirm}>Отменить запись</button></div>
+  </Modal>;
 }
 
 export function DeletePatientDialog({ patient, onConfirm, onClose }: DeletePatientProps) {

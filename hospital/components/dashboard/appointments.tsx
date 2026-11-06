@@ -1,4 +1,5 @@
-import { ArrowRight, CalendarPlus } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, CalendarPlus, Check } from "@/components/icons";
 import { formatDate, statusLabels } from "@/lib/format";
 import type { Appointment, DashboardModel } from "@/lib/types";
 import { EmptyState, PanelHeading, SearchField, styles } from "./shared";
@@ -26,24 +27,25 @@ function AppointmentRow({ appointment, model, overview }: {
         {!overview && <div className="mt-1 text-xs text-slate-500">{formatDate(appointment.date)}</div>}
       </td>
       <td className="px-6 py-4 font-medium text-slate-800">{patient?.name}</td>
-      <td className="px-6 py-4 text-slate-500">{doctor?.name}</td>
+      <td className="px-6 py-4 text-slate-600">{doctor?.name}<span className="mt-1 block text-xs text-slate-500">{doctor?.specialty} · Каб. {doctor?.room}</span></td>
       <td className="px-6 py-4">
-        <span className={`inline-flex whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ${statusColors[appointment.status]}`}>
+        <span className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium before:size-1.5 before:rounded-full before:bg-current ${statusColors[appointment.status]}`}>
           {statusLabels[appointment.status]}
         </span>
       </td>
       {!overview && (
         <td className="px-6 py-4">
-          {canCancel && (
+          {canCancel && <div className="flex items-center gap-2">
+            {appointment.date <= model.today && <button type="button" title="Завершить приём" className="grid size-11 shrink-0 place-items-center rounded-lg text-teal-800 hover:bg-teal-50" aria-label={`Завершить приём ${appointment.time} ${patient?.name}`} onClick={() => model.onCompleteAppointment(appointment)}><Check /></button>}
             <button
               type="button"
-              className="text-xs font-semibold text-rose-600 hover:underline"
+              className="min-h-11 rounded-lg px-2 text-xs font-medium text-rose-700 hover:bg-rose-50"
               onClick={() => model.onCancelAppointment(appointment)}
               aria-label={`Отменить запись ${appointment.time} ${patient?.name}`}
             >
               Отменить
             </button>
-          )}
+          </div>}
         </td>
       )}
     </tr>
@@ -51,9 +53,11 @@ function AppointmentRow({ appointment, model, overview }: {
 }
 
 export function AppointmentsSection({ model, overview = false }: { model: DashboardModel; overview?: boolean }) {
+  const [status, setStatus] = useState("");
+  const [date, setDate] = useState("");
   const appointments = overview
     ? model.appointments.filter((item) => item.date === model.today && item.status !== "cancelled").sort((first, second) => first.time.localeCompare(second.time))
-    : model.filteredAppointments;
+    : model.filteredAppointments.filter((item) => (!status || item.status === status) && (!date || item.date === date));
   const columns = ["Время", "Пациент", "Врач", "Статус", ...(overview ? [] : ["Действия"])];
 
   return (
@@ -67,18 +71,21 @@ export function AppointmentsSection({ model, overview = false }: { model: Dashbo
             Все записи <ArrowRight size={14} />
           </button>
         ) : (
-          <button type="button" className={styles.primary} onClick={model.onAddAppointment}>
+          <button type="button" className={styles.primary} onClick={() => model.onAddAppointment()}>
             <CalendarPlus size={16} />Записать на приём
           </button>
         )}
       </PanelHeading>
       {!overview && (
-        <div className="flex border-b border-slate-100 p-4">
+        <div className="flex flex-wrap gap-3 border-b border-slate-100 p-4">
           <SearchField placeholder="Поиск записей" query={model.query} onQueryChange={model.setQuery} />
+          <input type="date" name="appointmentDate" aria-label="Дата приёма" className={styles.field} value={date} onChange={(event) => setDate(event.target.value)} />
+          <select aria-label="Статус записи" className={styles.field} value={status} onChange={(event) => setStatus(event.target.value)}><option value="">Все статусы</option>{Object.entries(statusLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
+          <button type="button" className={styles.secondary} onClick={() => { setDate(""); setStatus(""); model.setQuery(""); }}>Сбросить</button>
         </div>
       )}
       {appointments.length === 0 ? (
-        <EmptyState>Записи не найдены. Создайте новую запись на приём.</EmptyState>
+        <EmptyState>Записи не найдены. Измените фильтры или создайте новую запись на приём.</EmptyState>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[620px] text-left text-sm">
