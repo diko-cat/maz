@@ -2,10 +2,11 @@ import { initials } from "@/lib/format";
 import { ArrowRight, Stethoscope } from "@/components/icons";
 import type { DashboardModel, Doctor } from "@/lib/types";
 import { avatarColors, EmptyState, SearchField, styles } from "./shared";
+import { LocalizedContent } from "../locale-provider";
 
 function DoctorCard({ doctor, index, onBook }: { doctor: Doctor; index: number; onBook: (doctorId: string) => void }) {
   return (
-    <article className={`${styles.panel} p-6`}>
+    <LocalizedContent><article className={`${styles.panel} p-6`}>
       <div className="mb-5 flex items-center gap-4">
         <div className={`flex size-14 items-center justify-center rounded-xl text-lg font-semibold ${avatarColors[index % avatarColors.length]}`}>
           {initials(doctor.name)}
@@ -23,13 +24,13 @@ function DoctorCard({ doctor, index, onBook }: { doctor: Doctor; index: number; 
         </span>
       </div>
       {doctor.available && <button type="button" className={`${styles.secondary} mt-5 w-full justify-between`} aria-label={`Записаться: ${doctor.name}`} onClick={() => onBook(doctor.id)}>Записать пациента<ArrowRight size={16} /></button>}
-    </article>
+    </article></LocalizedContent>
   );
 }
 
 export function DoctorsSection({ model }: { model: DashboardModel }) {
   return (
-    <>
+    <LocalizedContent><>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-medium text-slate-800">Наши специалисты</h2>
@@ -46,6 +47,6 @@ export function DoctorsSection({ model }: { model: DashboardModel }) {
           {model.filteredDoctors.map((doctor, index) => <DoctorCard key={doctor.id} doctor={doctor} index={index} onBook={model.onAddAppointment} />)}
         </div>
       )}
-    </>
+    </></LocalizedContent>
   );
 }

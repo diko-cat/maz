@@ -3,6 +3,7 @@ import { ArrowRight, CalendarPlus, Check } from "@/components/icons";
 import { formatDate, statusLabels } from "@/lib/format";
 import type { Appointment, DashboardModel } from "@/lib/types";
 import { EmptyState, PanelHeading, SearchField, styles } from "./shared";
+import { LocalizedContent } from "../locale-provider";
 
 const statusColors: Record<Appointment["status"], string> = {
   confirmed: "bg-teal-50 text-teal-700",
@@ -21,10 +22,10 @@ function AppointmentRow({ appointment, model, overview }: {
   const canCancel = appointment.status === "confirmed" || appointment.status === "pending";
 
   return (
-    <tr className="border-t border-slate-100 transition-colors hover:bg-slate-50">
+    <LocalizedContent><tr className="border-t border-slate-100 transition-colors hover:bg-slate-50">
       <td className="whitespace-nowrap px-6 py-4">
         <div className="font-mono text-base font-medium tabular-nums text-slate-800">{appointment.time}</div>
-        {!overview && <div className="mt-1 text-xs text-slate-500">{formatDate(appointment.date)}</div>}
+        {!overview && <div className="mt-1 text-xs text-slate-500">{formatDate(appointment.date, model.locale)}</div>}
       </td>
       <td className="px-6 py-4 font-medium text-slate-800">{patient?.name}</td>
       <td className="px-6 py-4 text-slate-600">{doctor?.name}<span className="mt-1 block text-xs text-slate-500">{doctor?.specialty} · Каб. {doctor?.room}</span></td>
@@ -48,7 +49,7 @@ function AppointmentRow({ appointment, model, overview }: {
           </div>}
         </td>
       )}
-    </tr>
+    </tr></LocalizedContent>
   );
 }
 
@@ -61,7 +62,7 @@ export function AppointmentsSection({ model, overview = false }: { model: Dashbo
   const columns = ["Время", "Пациент", "Врач", "Статус", ...(overview ? [] : ["Действия"])];
 
   return (
-    <section className={styles.panel}>
+    <LocalizedContent><section className={styles.panel}>
       <PanelHeading
         title={overview ? "Приёмы сегодня" : "Расписание приёмов"}
         description={overview ? "План дня вашей клиники" : "Поиск по пациенту, врачу, дате и статусу"}
@@ -98,6 +99,6 @@ export function AppointmentsSection({ model, overview = false }: { model: Dashbo
           </table>
         </div>
       )}
-    </section>
+    </section></LocalizedContent>
   );
 }

@@ -5,6 +5,7 @@ import {
 } from "@/components/icons";
 import { formatDate } from "@/lib/format";
 import type { Section } from "@/lib/types";
+import { LanguageSwitcher, LocalizedContent, useLocale } from "./locale-provider";
 import { ClinicUserMenu } from "./clinic-user-menu";
 
 const sections = {
@@ -41,7 +42,7 @@ interface SidebarProps {
 
 export function ClinicSidebar({ section, patientCount, open, onNavigate, onClose, onHelp, profile }: SidebarProps) {
   return (
-    <>
+    <LocalizedContent><>
       {open && <button className="fixed inset-0 z-30 bg-slate-950/30 md:hidden" aria-label="Закрыть меню" onClick={onClose} />}
       <aside id="app-sidebar" className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col overflow-y-auto bg-slate-950 p-5 text-white transition-transform duration-200 motion-reduce:transition-none md:translate-x-0 ${open ? "translate-x-0 visible" : "-translate-x-full invisible md:visible"}`}>
         <Link href="/" aria-label="maz — главная" className="flex items-center gap-3 px-3 py-3 text-3xl font-semibold tracking-tight text-white">
@@ -81,7 +82,7 @@ export function ClinicSidebar({ section, patientCount, open, onNavigate, onClose
           <ClinicUserMenu profile={profile} onProfile={() => onNavigate("profile")} />
         </div>
       </aside>
-    </>
+    </></LocalizedContent>
   );
 }
 
@@ -95,7 +96,7 @@ interface HeaderProps {
 export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }: HeaderProps) {
   const MenuIcon = sidebarOpen ? PanelLeftClose : PanelLeftOpen;
   return (
-    <header className="sticky top-0 z-20 flex h-18 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-8">
+    <LocalizedContent><header className="sticky top-0 z-20 flex h-18 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-8">
       <div className="flex min-w-0 items-center gap-3 text-sm text-slate-500 [&>span]:hidden lg:[&>span]:inline [&_strong]:truncate [&_strong]:font-medium [&_strong]:text-slate-800">
         <button
           className="grid size-11 shrink-0 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 md:hidden"
@@ -110,31 +111,32 @@ export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }:
         <span className="text-slate-300" aria-hidden="true">/</span>
         <strong>{sections[section].label}</strong>
       </div>
-      <div className="flex shrink-0 items-center gap-5">
-        <Link href="/portal" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-teal-800/15 bg-teal-50 px-3 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-100">
+      <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+        <Link href="/portal" aria-label="Личный кабинет" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-teal-800/15 bg-teal-50 px-2 sm:px-3 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-100">
           <UserRound size={16} aria-hidden="true" />
           <span className="hidden sm:inline">Личный кабинет</span>
-          <span className="sm:hidden">Кабинет</span>
         </Link>
         <span className="hidden items-center gap-2 text-xs text-slate-500 before:size-1.5 before:rounded-full before:bg-teal-700 sm:flex">Рабочее пространство клиники</span>
-        <span className="grid size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600" aria-label={profile.name}>{profileInitials(profile.name)}</span>
+        <LanguageSwitcher />
+        <span className="hidden size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600 sm:grid" aria-label={profile.name}>{profileInitials(profile.name)}</span>
       </div>
-    </header>
+    </header></LocalizedContent>
   );
 }
 
 export function PageHeading({ section, today, ready }: { section: Section; today: string; ready: boolean }) {
+  const { locale } = useLocale();
   const { label, description } = sections[section];
   return (
-    <div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:text-slate-900 sm:[&_h1]:text-4xl">
+    <LocalizedContent><div className="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-end [&_h1]:text-3xl [&_h1]:font-semibold [&_h1]:tracking-tight [&_h1]:text-slate-900 sm:[&_h1]:text-4xl">
       <div>
         <h1>{section === "overview" ? "Обзор клиники" : label}</h1>
         <p className="mt-3 text-sm leading-relaxed text-slate-500">{description}</p>
       </div>
       <div className="flex shrink-0 items-center gap-2 self-start rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600 sm:self-auto">
         <CalendarDays size={16} aria-hidden="true" />
-        <span>{ready ? formatDate(today) : "Загрузка даты…"}</span>
+        <span>{ready ? formatDate(today, locale) : "Загрузка даты…"}</span>
       </div>
-    </div>
+    </div></LocalizedContent>
   );
 }

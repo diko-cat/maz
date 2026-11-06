@@ -5,6 +5,7 @@ import { doctors, type PatientDraft } from "@/lib/data";
 import { updateHospital, useHospitalStore } from "@/lib/hospital-store";
 import { selectDashboard } from "@/lib/selectors";
 import type { Appointment, DashboardModel, Patient, Section } from "@/lib/types";
+import { useLocale } from "./locale-provider";
 import { getProfileSnapshot, getServerProfileSnapshot, subscribeProfile, writeProfile } from "@/lib/profile-store";
 import type { UserProfile } from "./clinic-shell";
 
@@ -14,6 +15,7 @@ function createId(prefix: "P" | "A"): string {
 
 export function useClinicDashboard() {
   const store = useHospitalStore();
+  const { locale } = useLocale();
   const [section, setCurrentSection] = useState<Section>("overview");
   const [query, setQuery] = useState("");
   const [gender, setGender] = useState("");
@@ -107,6 +109,7 @@ export function useClinicDashboard() {
   }
 
   const model: DashboardModel = {
+    locale,
     ...selectDashboard(store, doctors, store.today, { query, gender, sort }),
     patients: store.patients,
     appointments: store.appointments,

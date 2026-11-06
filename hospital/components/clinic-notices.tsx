@@ -2,6 +2,7 @@ import { X } from "@/components/icons";
 import type { Appointment, Patient } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import { Modal } from "./clinic-dialogs";
+import { LocalizedContent, useLocale } from "./locale-provider";
 
 interface DeletePatientProps {
   patient: Patient;
@@ -10,8 +11,9 @@ interface DeletePatientProps {
 }
 
 export function CancelAppointmentDialog({ appointment, onConfirm, onClose }: { appointment: Appointment; onConfirm: () => void; onClose: () => void }) {
+  const { locale } = useLocale();
   return <Modal title="Отменить запись?" onClose={onClose}>
-    <p className="dialog-description">Запись на {formatDate(appointment.date)} в {appointment.time} будет отменена. Время врача станет доступно для новой записи.</p>
+    <p className="dialog-description">Запись на {formatDate(appointment.date, locale)} в {appointment.time} будет отменена. Время врача станет доступно для новой записи.</p>
     <div className="dialog-actions"><button className="secondary-button" onClick={onClose}>Оставить запись</button><button className="danger-button" onClick={onConfirm}>Отменить запись</button></div>
   </Modal>;
 }
@@ -59,12 +61,12 @@ export function AboutClinic({ onClose }: { onClose: () => void }) {
 
 export function Notification({ message, onClose }: { message: string; onClose: () => void }) {
   return (
-    <div className="toast-message" role="status">
+    <LocalizedContent><div className="toast-message" role="status">
       <span className="toast-check" aria-hidden="true">✓</span>
       {message}
       <button className="icon-button" onClick={onClose} aria-label="Закрыть уведомление">
         <X size={16} aria-hidden="true" />
       </button>
-    </div>
+    </div></LocalizedContent>
   );
 }

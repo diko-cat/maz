@@ -1,11 +1,6 @@
-import type { Appointment } from "./types";
+import type { Appointment, Locale } from "./types";
 
-const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
+const localeTags: Record<Locale, string> = { kk: "kk-KZ", ru: "ru-RU", en: "en-US" };
 
 export const statusLabels: Record<Appointment["status"], string> = {
   confirmed: "Подтверждена",
@@ -14,8 +9,13 @@ export const statusLabels: Record<Appointment["status"], string> = {
   cancelled: "Отменена",
 };
 
-export function formatDate(value: string): string {
-  return dateFormatter.format(new Date(`${value}T12:00:00Z`));
+export function formatDate(value: string, locale: Locale = "ru"): string {
+  return new Intl.DateTimeFormat(localeTags[locale], {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${value}T12:00:00Z`));
 }
 
 export function initials(name: string): string {

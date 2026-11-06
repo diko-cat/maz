@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { ArrowUpRight, ChevronUpDown, Stethoscope, UserRound, Users } from "./icons";
 import { initials } from "@/lib/format";
+import { LocalizedContent } from "./locale-provider";
 import type { UserProfile } from "./clinic-shell";
 
 const destinations = [
@@ -37,7 +38,7 @@ export function ClinicUserMenu({ profile, onProfile }: { profile: UserProfile; o
   }
 
   return (
-    <div ref={rootRef} className="relative mt-4" onKeyDown={handleKeyboard} onBlur={(event) => {
+    <LocalizedContent><div ref={rootRef} className="relative mt-4" onKeyDown={handleKeyboard} onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
     }}>
       <button
@@ -68,6 +69,6 @@ export function ClinicUserMenu({ profile, onProfile }: { profile: UserProfile; o
           </div>
         </nav>
       )}
-    </div>
+    </div></LocalizedContent>
   );
 }
