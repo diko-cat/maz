@@ -112,6 +112,10 @@ export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }:
         <strong>{sections[section].label}</strong>
       </div>
       <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+        <Link href="/guest" aria-label="Страница гостя" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 sm:px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50">
+          <HeartPulse size={16} aria-hidden="true" />
+          <span className="hidden sm:inline">Для гостей</span>
+        </Link>
         <Link href="/portal" aria-label="Личный кабинет" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-teal-800/15 bg-teal-50 px-2 sm:px-3 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-100">
           <UserRound size={16} aria-hidden="true" />
           <span className="hidden sm:inline">Личный кабинет</span>
