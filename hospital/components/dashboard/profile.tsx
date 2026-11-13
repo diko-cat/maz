@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { Mail, Phone, UserRound } from "@/components/icons";
 import { styles } from "./shared";
 import { profileInitials, type UserProfile } from "../clinic-shell";
+import { LocalizedContent } from "../locale-provider";
 
 export function ProfileSection({ profile, onSave }: { profile: UserProfile; onSave: (profile: UserProfile) => void }) {
   const [draft, setDraft] = useState(profile);
@@ -25,7 +26,7 @@ export function ProfileSection({ profile, onSave }: { profile: UserProfile; onSa
   }
 
   return (
-    <section className="max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white">
+    <LocalizedContent><section className="max-w-3xl overflow-hidden rounded-2xl border border-slate-200 bg-white">
       <div className="border-b border-slate-100 px-6 py-5">
         <h2 className="text-lg font-medium text-slate-900">Личные данные</h2>
         <p className="mt-1 text-sm text-slate-500">Эти сведения отображаются в рабочем пространстве клиники.</p>
@@ -56,6 +57,6 @@ export function ProfileSection({ profile, onSave }: { profile: UserProfile; onSa
           <p className="text-xs text-slate-500">Профиль хранится в локальном браузере.</p>
         </div>
       </form>
-    </section>
+    </section></LocalizedContent>
   );
 }

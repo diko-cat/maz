@@ -6,13 +6,18 @@ import ClinicDashboard from "./clinic-dashboard";
 import { ClinicHeader, ClinicSidebar, PageHeading } from "./clinic-shell";
 import { AboutClinic, CancelAppointmentDialog, DeletePatientDialog, Notification } from "./clinic-notices";
 import { useClinicDashboard } from "./use-clinic-dashboard";
+import { LocaleProvider, LocalizedContent } from "./locale-provider";
 
 export default function ClinicApp() {
+  return <LocaleProvider><ClinicAppContent /></LocaleProvider>;
+}
+
+function ClinicAppContent() {
   const clinic = useClinicDashboard();
   const { store, model } = clinic;
 
   return (
-    <div className="min-h-screen">
+    <LocalizedContent><div className="min-h-screen">
       <a href="#main-content" className="fixed left-4 top-4 z-50 -translate-y-24 rounded-lg bg-white px-4 py-3 text-sm text-teal-800 shadow-sm focus:translate-y-0">Перейти к содержимому</a>
       <ClinicSidebar
         section={model.section}
@@ -74,6 +79,6 @@ export default function ClinicApp() {
       {clinic.help && <AboutClinic onClose={clinic.closeHelp} />}
       {clinic.cancelling && <CancelAppointmentDialog appointment={clinic.cancelling} onConfirm={clinic.confirmCancelAppointment} onClose={clinic.closeCancelDialog} />}
       {clinic.toast && <Notification message={clinic.toast} onClose={clinic.closeToast} />}
-    </div>
+    </div></LocalizedContent>
   );
 }

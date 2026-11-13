@@ -19,6 +19,7 @@ import {
   type PatientDraft,
 } from "@/lib/data";
 import type { Appointment, Patient } from "@/lib/types";
+import { LocalizedContent } from "./locale-provider";
 
 type ModalProps = {
   title: string;
@@ -156,7 +157,7 @@ export function Modal({ title, children, onClose }: ModalProps) {
   }
 
   return (
-    <dialog
+    <LocalizedContent><dialog
       ref={dialogRef}
       className="app-dialog"
       aria-labelledby={titleId}
@@ -178,7 +179,7 @@ export function Modal({ title, children, onClose }: ModalProps) {
         </button>
       </div>
       {children}
-    </dialog>
+    </dialog></LocalizedContent>
   );
 }
 

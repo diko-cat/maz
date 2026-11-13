@@ -2,6 +2,7 @@ import { ArrowRight, Pencil, Plus, Trash2 } from "@/components/icons";
 import { formatDate, initials } from "@/lib/format";
 import type { DashboardModel, Patient } from "@/lib/types";
 import { avatarColors, EmptyState, PanelHeading, SearchField, styles } from "./shared";
+import { LocalizedContent } from "../locale-provider";
 
 function PatientFilters({ model }: { model: DashboardModel }) {
   function resetFilters() {
@@ -11,7 +12,7 @@ function PatientFilters({ model }: { model: DashboardModel }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-3 border-b border-slate-100 p-4">
+    <LocalizedContent><div className="flex flex-wrap gap-3 border-b border-slate-100 p-4">
       <SearchField placeholder="Поиск по ФИО или телефону" query={model.query} onQueryChange={model.setQuery} />
       <select aria-label="Фильтр по полу" className={styles.field} value={model.gender} onChange={(event) => model.setGender(event.target.value)}>
         <option value="">Любой пол</option>
@@ -23,13 +24,13 @@ function PatientFilters({ model }: { model: DashboardModel }) {
         <option value="registeredAt">Сначала новые</option>
       </select>
       <button type="button" className={styles.secondary} onClick={resetFilters}>Сбросить</button>
-    </div>
+    </div></LocalizedContent>
   );
 }
 
 function PatientRow({ patient, index, model }: { patient: Patient; index: number; model: DashboardModel }) {
   return (
-    <tr className="border-t border-slate-100 transition-colors hover:bg-slate-50/70">
+    <LocalizedContent><tr className="border-t border-slate-100 transition-colors hover:bg-slate-50/70">
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           <span className={`flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${avatarColors[index % avatarColors.length]}`}>
@@ -41,9 +42,9 @@ function PatientRow({ patient, index, model }: { patient: Patient; index: number
           </div>
         </div>
       </td>
-      <td className="whitespace-nowrap px-4 py-4 text-slate-500">{formatDate(patient.birthDate)}</td>
+      <td className="whitespace-nowrap px-4 py-4 text-slate-500">{formatDate(patient.birthDate, model.locale)}</td>
       <td className="whitespace-nowrap px-4 py-4 text-slate-600">{patient.phone}</td>
-      <td className="whitespace-nowrap px-4 py-4 text-slate-500">{formatDate(patient.registeredAt)}</td>
+      <td className="whitespace-nowrap px-4 py-4 text-slate-500">{formatDate(patient.registeredAt, model.locale)}</td>
       <td className="px-6 py-4">
         <div className="flex justify-end gap-1">
           <button type="button" aria-label={`Редактировать: ${patient.name}`} className="grid size-11 place-items-center rounded-lg text-slate-500 hover:bg-teal-50 hover:text-teal-700" onClick={() => model.onEditPatient(patient)}>
@@ -54,7 +55,7 @@ function PatientRow({ patient, index, model }: { patient: Patient; index: number
           </button>
         </div>
       </td>
-    </tr>
+    </tr></LocalizedContent>
   );
 }
 
@@ -64,7 +65,7 @@ export function PatientsSection({ model, overview = false }: { model: DashboardM
     : model.filteredPatients;
 
   return (
-    <section className={styles.panel}>
+    <LocalizedContent><section className={styles.panel}>
       <PanelHeading
         title={overview ? "Недавно добавленные пациенты" : "Все пациенты"}
         description={overview ? "Последние регистрации в вашей клинике" : `Найдено: ${patients.length} из ${model.patients.length}`}
@@ -103,6 +104,6 @@ export function PatientsSection({ model, overview = false }: { model: DashboardM
       <div className="border-t border-slate-100 px-6 py-3 text-xs text-slate-500">
         {overview ? `Всего пациентов в клинике: ${model.patients.length}` : "Изменения сохраняются в этом браузере"}
       </div>
-    </section>
+    </section></LocalizedContent>
   );
 }

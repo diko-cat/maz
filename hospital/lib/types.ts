@@ -1,4 +1,5 @@
 export type Section = "overview" | "patients" | "doctors" | "appointments" | "profile";
+export type Locale = "kk" | "ru" | "en";
 export type PatientGender = "female" | "male";
 export type AppointmentStatus = "confirmed" | "pending" | "completed" | "cancelled";
 
@@ -74,6 +75,7 @@ export interface DashboardActions {
 }
 
 export interface DashboardModel extends HospitalData, DashboardFilters, DashboardSelection, DashboardActions {
+  locale: Locale;
   section: Section;
   doctors: Doctor[];
   today: string;
