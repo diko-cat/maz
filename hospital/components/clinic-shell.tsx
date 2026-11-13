@@ -111,24 +111,14 @@ export function ClinicHeader({ section, sidebarOpen, onToggleSidebar, profile }:
         <span className="text-slate-300" aria-hidden="true">/</span>
         <strong>{sections[section].label}</strong>
       </div>
-<<<<<<< HEAD
-      <div className="flex shrink-0 items-center gap-5">
-        <Link href="/portal" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-teal-800/15 bg-teal-50 px-3 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-100">
-=======
       <div className="flex shrink-0 items-center gap-2 sm:gap-4">
         <Link href="/portal" aria-label="Личный кабинет" className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-teal-800/15 bg-teal-50 px-2 sm:px-3 text-sm font-medium text-teal-900 transition-colors hover:bg-teal-100">
->>>>>>> 79fd1f9a114fadc3315d15ff0d44060c18c841b4
           <UserRound size={16} aria-hidden="true" />
           <span className="hidden sm:inline">Личный кабинет</span>
         </Link>
-<<<<<<< HEAD
-        <span className="hidden items-center gap-2 text-xs text-slate-500 before:size-1.5 before:rounded-full before:bg-teal-700 sm:flex">Локальный режим</span>
-        <span className="grid size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600" aria-label={profile.name}>{profileInitials(profile.name)}</span>
-=======
         <span className="hidden items-center gap-2 text-xs text-slate-500 before:size-1.5 before:rounded-full before:bg-teal-700 sm:flex">Рабочее пространство клиники</span>
         <LanguageSwitcher />
         <span className="hidden size-8 place-items-center rounded-full border border-slate-200 bg-slate-50 text-xs font-medium text-slate-600 sm:grid" aria-label={profile.name}>{profileInitials(profile.name)}</span>
->>>>>>> 79fd1f9a114fadc3315d15ff0d44060c18c841b4
       </div>
     </header></LocalizedContent>
   );
